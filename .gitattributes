@@ -1,0 +1,14 @@
+# Git LFS：把超过 GitHub 单文件软上限(50MB)的词库交给 LFS
+#
+# 使用条件：本机需安装 git-lfs（https://git-lfs.com）
+#   git lfs install
+#   git add .gitattributes
+#   git commit -m "chore: track large dicts with LFS"
+#
+# 协作者克隆前需先安装 git-lfs，否则拉到的是 LFS 指针文件（约 130 字节的文本），
+# 词库会静默失效。若不想引入这个依赖，删掉本文件即可 —— 90MB 未超过
+# GitHub 100MB 的硬上限，直接 git push 只会收到一条警告，仍能成功。
+cn_dicts_cell/composite.dict.yaml filter=lfs diff=lfs merge=lfs -text
+
+# 若以后新增更大的词库，可按下面模板追加（其余 >50MB 的文件目前没有）
+# cn_dicts_cell/xxx.dict.yaml filter=lfs diff=lfs merge=lfs -text

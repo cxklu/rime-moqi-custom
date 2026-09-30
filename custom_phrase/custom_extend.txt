@@ -1,0 +1,23 @@
+# custom_extend.txt → cn_dicts_common/custom_extend.dict.yaml
+#
+# 作用：调整系统已有词的候选排序 / 添加系统没有的词
+#       默认权重 500000（高于系统词频）
+#
+# 格式：
+#     词	← 自动生成辅码，默认权重 500000
+#     词	权重	← 自动生成辅码，指定权重
+#     码长	ma;um; chang;pn;	500000	←指定多音字的读音，可从生成的yaml复制过来
+# workflow: 编辑此文件 → python Rime词库管理.py → 重新部署 Rime
+
+巴巴博一
+码长	ma;um; chang;pn;	500000
+码长短
+没过	mei;dy; guo;zc;	500000
+墨奇
+雾凇
+音形
+长按	chang;pn; an;fn;	500000
+家妻
+假期	500001
+蓝水鸭
+小鹤
