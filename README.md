@@ -41,9 +41,10 @@
 	- `Da` date
 	- `Uj` time
 	- `Wk` week
+- lunar.lua 增加公历候选
 - 固定词频修正：原版墨奇未关闭语言模型，正常打出 `kc` 时候选第一「靠」第二「考」，但有上一个字是「不」时第一会变成「考」的情况。已关掉语言模型以实现固定词频
-- 小狼毫默认皮肤使用[薄荷输入法](https://github.com/Mintimate/oh-my-rime)的蓝水鸭
-- 同文布局改自[魔裁 ms-trime](https://github.com/lost-42/ms-trime)
+- 小狼毫默认皮肤使用 [薄荷输入法](https://github.com/Mintimate/oh-my-rime)的蓝水鸭
+- 同文布局改自 [魔裁 ms-trime](https://github.com/lost-42/ms-trime)
 
 ## ms.trime.yaml
 安卓端同文特有
@@ -72,11 +73,11 @@
 | 复制 | 行首 | ↓ | 行尾 | 删词<br>⌫ |
 | 返回 | 撤销 | Tab<br>Space | 重做 | Enter |
 
-Home / End：Ctrl+Home / End，跳到文首 / 文尾
-选择：按住 Shift
-⇐ / ⇒：Ctrl+← / → 跳词
-删词：Ctrl+Backspace / Delete
-重做：Ctrl+Shift+Z 取消撤销的内容
+- Home / End：Ctrl+Home / End，跳到文首 / 文尾
+- 选择：按住 Shift
+- ⇐ / ⇒：Ctrl+← / → 跳词
+- 删词：Ctrl+Backspace / Delete
+- 重做：Ctrl+Shift+Z 取消撤销的内容
 
 各种成对的括号和引号放在了数字区左侧。由于大部分常用符号可由引导打出或自定义引导，为了腾出空间直接砍掉了符号键，若需要可从工具栏的表情进入或自行修改。
 

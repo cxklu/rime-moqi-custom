@@ -644,6 +644,23 @@ local function Date2LunarDate(Gregorian)
     return LunarDate, LunarDate2, LunarDate3
 end
 
+-- 公历日期转中文：19491001 -> 一九四九年十月一日
+-- 年份逐位转换（零写作〇），月、日按中文读法（10 -> 十，20 -> 二十）
+local function Gregorian2Chinese(Gregorian)
+    Gregorian = tostring(Gregorian)
+    if #Gregorian ~= 8 or not tonumber(Gregorian) then return nil end
+    local y = tonumber(Gregorian:sub(1, 4))
+    local m = tonumber(Gregorian:sub(5, 6))
+    local d = tonumber(Gregorian:sub(7, 8))
+    if not (y and m and d) or m < 1 or m > 12 or d < 1 or d > 31 then return nil end
+    local year_cn = ""
+    for i = 1, 4 do
+        year_cn = year_cn .. numerical_names[tonumber(Gregorian:sub(i, i)) + 1]
+    end
+    year_cn = string.gsub(year_cn, "零", "〇")
+    return year_cn .. "年" .. convert_arab_to_chinese(m) .. "月" .. convert_arab_to_chinese(d) .. "日"
+end
+
 -- 农历
 -- 从 lunar: nl 获取农历触发关键字（双拼默认为 lunar）
 -- 从 recognizer/patterns/gregorian_to_lunar 获取第 2 个字符作为公历转农历的触发前缀，默认为 N
@@ -665,6 +682,13 @@ local function translator(input, seg, env)
         yield(date)
     elseif env.gregorian_to_lunar ~= '' and input:sub(1, 1) == env.gregorian_to_lunar then
         local date1, date2, date3 = Date2LunarDate(input:sub(2))
+        -- 公历中文日期，如 N19491001 -> 一九四九年十月一日，排在首位
+        local gregorian_cn = Gregorian2Chinese(input:sub(2))
+        if gregorian_cn then
+            local gregorian = Candidate("", seg.start, seg._end, gregorian_cn, "")
+            gregorian.quality = 999
+            yield(gregorian)
+        end
         local lunar_ymd = (Candidate("", seg.start, seg._end, date2, ""))
         lunar_ymd.quality = 999
         yield(lunar_ymd)
