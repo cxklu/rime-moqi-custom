@@ -1,0 +1,10 @@
+---
+name: custom_extend
+version: "示例"
+sort: by_weight
+...
+
+# 本文件由 custom_phrase/custom_extend.txt 经 Rime词库管理.py 生成，请勿手改。
+# 公开仓库里它只含示例词；克隆者请改 custom_extend.txt 后重跑脚本，
+# 再取消 moqi_wan.extended.dict.yaml 里 custom_extend 那行的注释、重新部署。
+

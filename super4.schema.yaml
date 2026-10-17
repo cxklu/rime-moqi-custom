@@ -1,0 +1,54 @@
+# Rime schema settings
+# encoding: utf-8
+#
+# 这不是给人用的输入方案，只是给「四字词 4 码反查」声明一份词典。
+#
+# 原因：方案里 `dependencies:` 列的名字会被部署器当成**方案 id** 去加载
+# `<名字>.schema.yaml`，由它编译词典并生成 build/<名字>.reverse.bin。
+# 只把词典写进 dependencies 而没有对应 schema 的话，日志会报
+#   W deployment_tasks.cc:205] missing input schema; skipped unsatisfied dependency: super4
+# 结果是 super4.reverse.bin 不会被生成，运行时反查报
+#   E reverse_lookup_dictionary.cc:39] Error opening reversedb '...build\super4.reverse.bin'
+# 本文件就是照 reverse_moqima.schema.yaml 抄的最小声明（不放进 default.yaml 的
+# schema_list，所以不会出现在方案选单里）。
+#
+# 词典 super4.dict.yaml ← 由 custom_phrase/custom_phrase_super_4jian_no_conflict.txt 生成
+
+schema:
+  schema_id: super4
+  name: "四字词4码（词典声明）"
+  version: "1"
+  description: |
+    只用于声明 super4 词典，供 moqi.yaml 的 reverse_lookup_filter@fourjian 做反查，
+    以及 table_translator@custom_phrase_super_4jian_no_conflict 作为输入词库。
+  dependencies:
+    - super4
+
+engine:
+  processors:
+    - key_binder
+    - speller
+    - selector
+    - navigator
+    - express_editor
+  segmentors:
+    - abc_segmentor
+  translators:
+    - echo_translator
+    - table_translator
+  filters:
+    - uniquifier
+
+key_binder:
+  __include: default:/key_binder?
+
+speller:
+  alphabet: zyxwvutsrqponmlkjihgfedcbaZYXWVUTSRQPONMLKJIHGFEDCBA[/|
+  # initials 定义仅作为始码的按键，排除 ` 让单个的 ` 可以直接上屏
+  initials: zyxwvutsrqponmlkjihgfedcbaZYXWVUTSRQPONMLKJIHGFEDCBA
+  # 第一位<空格>是拼音之间的分隔符；第二位<'>表示可以手动输入单引号来分割拼音。
+  delimiter: " '"
+  algebra:
+
+translator:
+  dictionary: super4

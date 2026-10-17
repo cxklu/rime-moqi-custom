@@ -1,0 +1,11 @@
+customization:
+  distribution_code_name: Weasel
+  distribution_version: 0.17.4
+  generator: "Weasel::UIStyleSettings"
+  modified_time: "Sat Oct 17 21:33:34 2026"
+  rime_version: 1.13.1
+patch:
+  preset_color_schemes:
+    mint_dark_blue: {alpha: 1, author: "Mintimate <\"Mintimate's Blog\">", back_color: 0x424242, base_offset: 0, candidate_text_color: 0xefefef, comment_text_color: 0xefefef, hilited_candidate_back_color: 0xc6c01a, hilited_candidate_label_color: 0xefefef, hilited_candidate_text_color: 0xefefef, hilited_comment_text_color: 0xffffff, hilited_text_color: 0xc6c01a, label_color: 0xefefef, line_spacing: 5, mutual_exclusive: false, name: "黑水鸭／Mint Dark Blue", shadow_size: 0, spacing: 10, text_color: 0x6495ed, translucency: false}
+    mint_light_blue: {alpha: 1, author: "Mintimate <\"Mintimate's Blog\">", back_color: 0xefefef, base_offset: 0, candidate_text_color: 0x424242, comment_text_color: 0xcac9c8, hilited_candidate_back_color: 0xed9564, hilited_candidate_label_color: 0xefefef, hilited_candidate_text_color: 0xefefef, hilited_comment_text_color: 0xefefef, hilited_text_color: 0xed9564, label_color: 0xcac9c8, line_spacing: 5, mutual_exclusive: false, name: "蓝水鸭／Mint Light Blue", shadow_size: "0                       `", spacing: 10, text_color: 0x6495ed, translucency: true}
+  "style/color_scheme": mint_light_blue
