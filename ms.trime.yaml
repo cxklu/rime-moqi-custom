@@ -1,0 +1,1349 @@
+# Trime custom style settings
+# encoding: utf-8
+
+config_version: "3.0"
+name: 魔裁 #方案名称
+author: lost-42 #作者信息
+
+#界面风格、功能开关
+style:
+  auto_caps: false #自動句首大寫:true|false|ascii
+  root_background: keyboard_back_color # 整个键盘区+候选栏的背景图/色
+  candidate_font: han.ttf #候选字体
+  candidate_padding: 5 #候选项内边距
+  candidate_spacing: 0.5 #候选间距
+  candidate_text_size: 18 #候选字号
+  candidate_view_height: 28 #候选区高度
+  color_scheme: shiqing #配色方案（石青=亮色，它自己写了 dark_scheme: songyan）
+  # 跟随系统日夜：同文设置 →「键盘样式」→ 打开「跟随系统夜间模式」，
+  # 并在「配色」里选中 石青。注意界面里选的配色会覆盖这一行。
+  comment_font: comment.ttf #编码提示字体
+  comment_height: 14 #编码提示区高度
+  comment_position: right #编码提示布局：right|top|overlay（3.3 用它取代旧 comment_on_top）
+  comment_text_size: 10 #编码提示字号（“标准”就是 10；再大就把候选挤成一条）
+  hanb_font: hanb.ttf #扩充字体
+  horizontal: true #水平模式
+  horizontal_gap: 12 #键水平间距
+  # 候选窗交给 3.3 内置渲染。旧版这一整段（layout: 的 max_length/max_width/sticky_lines/
+  # max_entries/all_phrases…，以及 window: 的模板列表）在 3.3 里都不再被读取，留着只会
+  # 让人以为能调；旧模板还会让候选窗按模板宽度算，长候选（DeepSeek Harness）只露出一条。
+  # 2026-10-19 整段删除，改用文件末尾同名的 preedit:/window: 新写法。
+  key_font: symbol.ttf #键盘字体
+  key_long_text_size: 16 #长标签字号
+  key_text_size: 20 #键字号
+  key_width: 10.0 #键宽，占屏幕宽的百分比
+  keyboards: [.default, number, edit, move, numberb] #键盘配置
+  # label_text_size: 22 #标签字号
+  label_font: label.ttf #编标签字体
+  latin_font: latin.ttf #西文本体
+  latin_locale: en_US #西文语言
+  locale: zh_CN #缺省语言 zh_TW,zh_CN,zh_HK,""
+  keyboard_height: 230 #锁定键盘高度，避免切换时键盘高度变化而造成闪烁
+  keyboard_height_land: 200 #锁定横屏下键盘高度，避免切换时键盘高度变化而造成闪烁
+  key_symbol_offset_x: -5
+  key_symbol_offset_y: 3
+  preview_font: latin.ttf #按键提示字体
+  preview_height: 56 #按键提示高度
+  preview_offset: -32 #按键提示纵向偏移
+  preview_text_size: 40 #按键提示字号
+  # 长按弹条（popup: [...]）的尺寸：3.3.12 走 popup_* 这一组键，缺了它们弹条尺寸为 0、也就是「看不见」。
+  # preview_* 只管按下时的大气泡，和弹条不是同一组参数。
+  popup_font: latin.ttf #弹条字体
+  # ⚠️ 实测：弹条里每个键**只显示 label 的首字符**（用 ASCII 标签 "AAAA" 验证过 → 只显示 A）。
+  #    所以 label 写「系统」「开发者」，弹条里实际只看得见「系」「开」。
+  #    这不是宽度截断——把 popup_width 从 56 加到 90 毫无变化，是「只取首字」的设计。
+  popup_width: 56 #弹条里每个候选键的宽度
+  popup_height: 52 #弹条高度
+  popup_bottom_margin: 68 #弹条距底部偏移
+  popup_key_height: 52 #弹条内按键高度
+  popup_text_size: 20 #弹条字号
+  proximity_correction: true #按键纠错
+  reset_ascii_mode_on_focus_change: false #焦点变更弹起软键盘时，是否重置 ascii_mode（3.3.10 起由 reset_ascii_mode 更名而来）
+  round_corner: 8 #按键圆角半径
+  shadow_radius: 0.0 #按键阴影半径
+  speech_opencc_config: none #语音输入简繁转换
+  symbol_font: symbol.ttf #符号字体
+  symbol_text_size: 10 #符号字号
+  text_font: latin.ttf #编码字体
+  text_size: 14 #编码区字号
+  vertical_correction: -5
+  vertical_gap: 4 #键盘行距
+  enter_label_mode: 0 #Enter 文案来源：0只用自己的 enter_labels 表（实测 2 会让所有 App 都退回 default，等于表失效），1只用 App 的 ActionLabel，2优先 App 的，3 App 的只做兜底
+  enter_labels: # Enter 键文案（按 App 上报的 IME 动作取；没有动作时用 default）
+    go: 前往 #IME_ACTION_GO：浏览器地址栏 / 搜索提交
+    search: 搜索 #IME_ACTION_SEARCH：应用内搜索框
+    send: 发送 #IME_ACTION_SEND：短信 / 邮件
+    next: 下个 #IME_ACTION_NEXT：表单下一项
+    pre: 上个 #IME_ACTION_PREVIOUS：表单上一项
+    done: 完成 #IME_ACTION_DONE：单行输入结尾
+    default: 换行 #无动作（多行文本、正文编辑器等）
+
+preedit: #预编辑文本视图参数
+  horizontal_padding: 8 #横向内边距
+  top_start_radius: 8 #上端圆角
+  top_end_radius: 8 #上端圆角
+  foreground: #前景样式
+    font_size: 16 #预编辑字号
+
+window: #候选窗口（悬浮窗）参数
+  insets: #窗口内边距
+    vertical: 4 #纵向内边距
+    horizontal: 6 #横向内边距
+  item_padding: #候选项内边距
+    horizontal: 6 #横向内边距
+  foreground: #前景样式
+    label_font_size: 16 #序号字号
+    text_font_size: 20 #候选字号
+    comment_font_size: 10 #注释字号（对齐“标准”的回显大小）
+
+fallback_colors:
+  candidate_text_color: text_color
+
+#配色方案
+preset_color_schemes:
+
+  yelan:
+    name: "夜岚"
+    light_scheme: anan
+    back_color: 0x101319
+    root_background: yelan_night.png
+    keyboard_background: yelan_night.png
+    candidate_background: 0xCC0D1220
+    candidate_text_color: 0xE9E4DC
+    comment_text_color: 0x9A9187
+    label_color: 0xE0A24C
+    text_color: 0xE8C98F
+    text_back_color: 0x14161C
+    hilited_text_color: 0xFFF3DC
+    hilited_back_color: 0x2A2419
+    hilited_candidate_back_color: 0xA86E22
+    hilited_candidate_text_color: 0xFFF1D8
+    hilited_label_color: 0xFFF1D8
+    hilited_comment_text_color: 0xF3E4CE
+    key_back_color: 0x1AFFFFFF
+    key_border_color: 0x2A2D36
+    key_text_color: 0xEDE7DE
+    key_symbol_color: 0x9A9187
+    # Shift/Ctrl 升起的「开启态」：缺这几个字段时会退回键面色，看上去就是「按下不变」
+    on_key_back_color: 0xE0E8B44D #开启态背景：夜岚金（比 Enter 的 0xA86E22 亮一档，配深字）
+    on_key_border_color: 0xCCE0A24C #开启态边框
+    on_key_text_color: 0x1A1206 #开启态文字：深色压金
+    on_key_symbol_color: 0x3A2A0E #开启态小字
+    hilited_on_key_back_color: 0xF2F2C462 #开启态按住时，再亮一档
+    hilited_on_key_text_color: 0x1A1206
+    hilited_key_back_color: 0xE63A3E4A
+    hilited_key_text_color: 0xFFFFFF
+    popup_back_color: 0x1AFFFFFF
+    popup_text_color: 0xEDE7DE
+    hilited_popup_back_color: 0xA86E22
+    hilited_popup_text_color: 0xFFF1D8
+    bc1: 0x1AFFFFFF
+    tc1: 0xEDE7DE
+    bc2: 0xB33E2A2A
+    tc2: 0xF3DCD8
+    bc3: 0x1AFFFFFF
+    tc3: 0xEDE7DE
+    bc4: 0xA86E22
+    tc4: 0xFFF1D8
+
+  dailan:
+    name: "黛蓝"
+    back_color: 0x243A64
+    root_background: dailan.png
+    keyboard_background: dailan.png
+    candidate_background: 0x2E000000
+    candidate_text_color: 0xEDF2FF
+    comment_text_color: 0x9FB0CC
+    label_color: 0x8FB6F0
+    text_color: 0xE6ECFF
+    text_back_color: 0x101A33
+    hilited_text_color: 0xFFFFFF
+    hilited_back_color: 0x2A3A5C
+    hilited_candidate_back_color: 0x2E5C9E
+    hilited_candidate_text_color: 0xEAF2FF
+    hilited_label_color: 0xEAF2FF
+    hilited_comment_text_color: 0xC9D8F0
+    key_back_color: 0x26FFFFFF #键面 15% 白
+    key_border_color: 0x1FFFFFFF
+    key_text_color: 0xF4F8FF
+    key_symbol_color: 0xBFD0EA
+    hilited_key_back_color: 0x66FFFFFF
+    hilited_key_text_color: 0x0B1A33
+    popup_back_color: 0x26FFFFFF #弹条底，与键面同 15% 白
+    popup_text_color: 0xF4F8FF
+    hilited_popup_back_color: 0x2E5C9E
+    hilited_popup_text_color: 0xEAF2FF
+    bc1: 0x26FFFFFF #Shift 键面 15% 白
+    tc1: 0xF4F8FF
+    bc2: 0x66B85C5C
+    tc2: 0xF7E4E4
+    bc3: 0x26FFFFFF #空格键面 15% 白
+    tc3: 0xF4F8FF
+    bc4: 0x2E5C9E
+    tc4: 0xEAF2FF
+
+  # ── 石青 / 松烟：一对「平涂」配色，跟随系统日夜自动切换 ───────────────────
+  # 为什么不铺图：键面/底图都用纯色 —— 不设 root_background / keyboard_background
+  # 这类图片字段，只给 keyboard_back_color 一个纯色，眼睛不花。
+  # 配对规则与官方主题 tongwenfeng.trime.yaml 一致：两个方案互相写
+  # dark_scheme / light_scheme，同文设置里打开「跟随系统日夜颜色」后，
+  # 系统亮色用 石青、暗色用 松烟。
+  shiqing:
+    name: "石青"
+    dark_scheme: songyan
+    back_color: 0xE8EDF2 #候选区/状态栏底（比原来暗一档）
+    keyboard_back_color: 0xD5DCE5 #键盘区底（纯色，无渐变图；比原来暗一档）
+    candidate_background: 0xEBF0F5 #候选条底
+    border_color: 0xC9D2DD #候选区边框
+    candidate_separator_color: 0xC8D0DA #候选分隔线
+    candidate_text_color: 0x1F262E #候选文字
+    comment_text_color: 0x7B8794 #编码提示/注释
+    label_color: 0x3F6E9E #候选序号
+    text_color: 0x2F5C82 #编码文字
+    text_back_color: 0xE1E7EE #编码区背景（悬浮窗）
+    hilited_text_color: 0x14324B #高亮编码
+    hilited_back_color: 0xC8D8E9 #高亮编码区背景
+    hilited_candidate_back_color: 0x3F6E9E #高亮候选背景
+    hilited_candidate_text_color: 0xFFFFFF
+    hilited_label_color: 0xFFFFFF
+    hilited_comment_text_color: 0xDCE9F4
+    key_back_color: 0xE9EEF4 #键面（近白，比纯白降一档）
+    key_border_color: 0xC6CEDA #键边框
+    key_text_color: 0x232A32 #键字
+    key_symbol_color: 0x8A95A2 #长按符号/助记符
+    on_key_back_color: 0x3F6E9E #开启态（Shift/Ctrl）：石青
+    on_key_border_color: 0x2F5A84
+    on_key_text_color: 0xFFFFFF
+    on_key_symbol_color: 0xD3E3F0
+    hilited_on_key_back_color: 0x2F5A84 #开启态按住
+    hilited_on_key_text_color: 0xFFFFFF
+    hilited_key_back_color: 0xB9CADD #按下（白底上压一层灰蓝，深字）
+    hilited_key_text_color: 0x1B2836
+    popup_back_color: 0xEDF1F6 #弹条底
+    popup_text_color: 0x26303B
+    hilited_popup_back_color: 0x3F6E9E
+    hilited_popup_text_color: 0xFFFFFF
+    bc1: 0xE9EEF4 #Shift
+    tc1: 0x232A32
+    bc2: 0xE4CFCF #退格：淡砖红
+    tc2: 0x7B3A3A
+    bc3: 0xE9EEF4 #空格
+    tc3: 0x232A32
+    bc4: 0x3F6E9E #Enter
+    tc4: 0xFFFFFF
+
+  songyan:
+    name: "松烟"
+    light_scheme: shiqing
+    back_color: 0x121417 #候选区/状态栏底
+    keyboard_back_color: 0x121417 #键盘区底（纯色，无渐变图）
+    candidate_background: 0x171A1E #候选条底
+    border_color: 0x262A30
+    candidate_separator_color: 0x24282E
+    candidate_text_color: 0xE3E7EC
+    comment_text_color: 0x89929D
+    label_color: 0x74A3C8
+    text_color: 0x9DBED8
+    text_back_color: 0x171A1E
+    hilited_text_color: 0xEAF3FB
+    hilited_back_color: 0x22303B
+    hilited_candidate_back_color: 0x43708F
+    hilited_candidate_text_color: 0xF2F8FD
+    hilited_label_color: 0xF2F8FD
+    hilited_comment_text_color: 0xCFDFEC
+    key_back_color: 0x1D2127 #键面（实心，不用半透明白，避免和底图叠出色块）
+    key_border_color: 0x2A2F36
+    key_text_color: 0xE6EAEF
+    key_symbol_color: 0x8B95A1
+    on_key_back_color: 0x43708F #开启态：雾蓝
+    on_key_border_color: 0x5C8FB4
+    on_key_text_color: 0xFFFFFF
+    on_key_symbol_color: 0xD8E8F4
+    hilited_on_key_back_color: 0x5285A8
+    hilited_on_key_text_color: 0xFFFFFF
+    hilited_key_back_color: 0x2A3038 #按下：亮一档
+    hilited_key_text_color: 0xFFFFFF
+    popup_back_color: 0x1B1F25
+    popup_text_color: 0xE6EAEF
+    hilited_popup_back_color: 0x43708F
+    hilited_popup_text_color: 0xF2F8FD
+    bc1: 0x1D2127 #Shift
+    tc1: 0xE6EAEF
+    bc2: 0x3A2326 #退格：暗砖红
+    tc2: 0xE8C6C6
+    bc3: 0x1D2127 #空格
+    tc3: 0xE6EAEF
+    bc4: 0x43708F #Enter
+    tc4: 0xF2F8FD
+
+  xime_deepblue:
+    name: "深蓝渐变"
+    back_color: 0x0E47A0
+    root_background: xime_deepblue.png
+    keyboard_background: xime_deepblue.png
+    candidate_background: 0x2E000000
+    candidate_text_color: 0xF2F7FD
+    comment_text_color: 0xB6C8DA
+    label_color: 0xD8ECFF
+    text_color: 0xDCEBFF
+    text_back_color: 0x1F000000
+    hilited_text_color: 0xFFFFFF
+    hilited_back_color: 0x33FFFFFF
+    hilited_candidate_back_color: 0x40FFFFFF
+    hilited_candidate_text_color: 0xFFFFFF
+    hilited_label_color: 0xFFFFFF
+    hilited_comment_text_color: 0xDCEBFF
+    key_back_color: 0x59FFFFFF
+    key_border_color: 0x14FFFFFF
+    key_text_color: 0xF6FAFF
+    key_symbol_color: 0xC3D4E6
+    hilited_key_back_color: 0x8CFFFFFF
+    hilited_key_text_color: 0xFFFFFF
+    popup_back_color: 0xF008182E
+    popup_text_color: 0xF2F7FD
+    hilited_popup_back_color: 0x4FA3FF
+    hilited_popup_text_color: 0x1A1A1A
+    bc1: 0x26FFFFFF
+    tc1: 0xF6FAFF
+    bc2: 0x26FFFFFF
+    tc2: 0xF6FAFF
+    bc3: 0x26FFFFFF
+    tc3: 0xF6FAFF
+    bc4: 0x40FFFFFF
+    tc4: 0xFFFFFF
+
+  xime_aurora:
+    name: "极光青蓝"
+    back_color: 0x005B54
+    root_background: xime_aurora.png
+    keyboard_background: xime_aurora.png
+    candidate_background: 0x2E000000
+    candidate_text_color: 0xF2F7FD
+    comment_text_color: 0xB6C8DA
+    label_color: 0xD8ECFF
+    text_color: 0xDCEBFF
+    text_back_color: 0x1F000000
+    hilited_text_color: 0xFFFFFF
+    hilited_back_color: 0x33FFFFFF
+    hilited_candidate_back_color: 0x40FFFFFF
+    hilited_candidate_text_color: 0xFFFFFF
+    hilited_label_color: 0xFFFFFF
+    hilited_comment_text_color: 0xDCEBFF
+    key_back_color: 0x59FFFFFF
+    key_border_color: 0x14FFFFFF
+    key_text_color: 0xF6FAFF
+    key_symbol_color: 0xC3D4E6
+    hilited_key_back_color: 0x8CFFFFFF
+    hilited_key_text_color: 0xFFFFFF
+    popup_back_color: 0xF0001B18
+    popup_text_color: 0xF2F7FD
+    hilited_popup_back_color: 0x39D6C4
+    hilited_popup_text_color: 0x1A1A1A
+    bc1: 0x26FFFFFF
+    tc1: 0xF6FAFF
+    bc2: 0x26FFFFFF
+    tc2: 0xF6FAFF
+    bc3: 0x26FFFFFF
+    tc3: 0xF6FAFF
+    bc4: 0x40FFFFFF
+    tc4: 0xFFFFFF
+
+  xime_forest:
+    name: "森林迷雾"
+    back_color: 0x1C5E20
+    root_background: xime_forest.png
+    keyboard_background: xime_forest.png
+    candidate_background: 0x2E000000
+    candidate_text_color: 0xF2F7FD
+    comment_text_color: 0xB6C8DA
+    label_color: 0xD8ECFF
+    text_color: 0xDCEBFF
+    text_back_color: 0x1F000000
+    hilited_text_color: 0xFFFFFF
+    hilited_back_color: 0x33FFFFFF
+    hilited_candidate_back_color: 0x40FFFFFF
+    hilited_candidate_text_color: 0xFFFFFF
+    hilited_label_color: 0xFFFFFF
+    hilited_comment_text_color: 0xDCEBFF
+    key_back_color: 0x59FFFFFF
+    key_border_color: 0x14FFFFFF
+    key_text_color: 0xF6FAFF
+    key_symbol_color: 0xC3D4E6
+    hilited_key_back_color: 0x8CFFFFFF
+    hilited_key_text_color: 0xFFFFFF
+    popup_back_color: 0xF008190B
+    popup_text_color: 0xF2F7FD
+    hilited_popup_back_color: 0x7FD07F
+    hilited_popup_text_color: 0x1A1A1A
+    bc1: 0x26FFFFFF
+    tc1: 0xF6FAFF
+    bc2: 0x26FFFFFF
+    tc2: 0xF6FAFF
+    bc3: 0x26FFFFFF
+    tc3: 0xF6FAFF
+    bc4: 0x40FFFFFF
+    tc4: 0xFFFFFF
+
+  xime_sunset:
+    name: "落日余晖"
+    back_color: 0x872E1C
+    root_background: xime_sunset.png
+    keyboard_background: xime_sunset.png
+    candidate_background: 0x2E000000
+    candidate_text_color: 0xF2F7FD
+    comment_text_color: 0xB6C8DA
+    label_color: 0xD8ECFF
+    text_color: 0xDCEBFF
+    text_back_color: 0x1F000000
+    hilited_text_color: 0xFFFFFF
+    hilited_back_color: 0x33FFFFFF
+    hilited_candidate_back_color: 0x40FFFFFF
+    hilited_candidate_text_color: 0xFFFFFF
+    hilited_label_color: 0xFFFFFF
+    hilited_comment_text_color: 0xDCEBFF
+    key_back_color: 0x59FFFFFF
+    key_border_color: 0x14FFFFFF
+    key_text_color: 0xF6FAFF
+    key_symbol_color: 0xC3D4E6
+    hilited_key_back_color: 0x8CFFFFFF
+    hilited_key_text_color: 0xFFFFFF
+    popup_back_color: 0xF0210E0A
+    popup_text_color: 0xF2F7FD
+    hilited_popup_back_color: 0xFFA06B
+    hilited_popup_text_color: 0x1A1A1A
+    bc1: 0x26FFFFFF
+    tc1: 0xF6FAFF
+    bc2: 0x26FFFFFF
+    tc2: 0xF6FAFF
+    bc3: 0x26FFFFFF
+    tc3: 0xF6FAFF
+    bc4: 0x40FFFFFF
+    tc4: 0xFFFFFF
+
+  dark:
+    name: "墨夜"
+
+    # ── 候选区 ──
+    back_color: 0x14181F #候选区背景
+    border_color: 0x2B3341 #边框/分隔线基色
+    candidate_background: 0x1B212A #候选条背景
+    candidate_border_color: 0x2B3341 #候选条边框
+    candidate_separator_color: 0x2B3341 #候选之间分隔线
+    candidate_text_color: 0xDCE3EC #候选文字
+    comment_text_color: 0x7E8A99 #编码提示/注释
+    label_color: 0x4C9BE8 #候选序号
+
+    # ── 编码区（预编辑）──
+    text_color: 0x9CC7F0 #编码文字
+    hilited_text_color: 0xFFFFFF #高亮编码
+    text_back_color: 0x1B212A #编码区背景（悬浮窗）
+    hilited_back_color: 0x22303F #高亮编码区背景
+
+    # ── 高亮（选中）的候选 ──
+    hilited_candidate_back_color: 0x2F6DA8 #高亮候选背景
+    hilited_candidate_text_color: 0xFFFFFF #高亮候选文字
+    hilited_candidate_button_color: 0x3D86C9 #候选上的按钮
+    hilited_label_color: 0xF2C14E #高亮候选序号
+    hilited_comment_text_color: 0xC2D6EA #高亮候选注释
+
+    # ── 普通按键 ──
+    key_back_color: 0x252C36 #按键背景
+    key_border_color: 0x333D4B #按键边框
+    key_text_color: 0xE4EAF2 #按键文字
+    key_symbol_color: 0x8C99A8 #长按符号/助记符
+
+    # ── 功能键的两态（配合 shift_lock / ctrl_lock 的锁定态）──
+    on_key_back_color: 0x2F6DA8 #开启态背景
+    on_key_border_color: 0x4C9BE8 #开启态边框
+    on_key_text_color: 0xFFFFFF #开启态文字
+    on_key_symbol_color: 0xCFE2F5 #开启态符号
+    off_key_back_color: 0x1F252E #关闭态背景
+    off_key_border_color: 0x2B3341 #关闭态边框
+    off_key_text_color: 0x9AA7B6 #关闭态文字
+    off_key_symbol_color: 0x6C7887 #关闭态符号
+
+    # ── 按下（高亮）的按键 ──
+    hilited_key_back_color: 0x3A4658 #按下背景
+    hilited_key_border_color: 0x4C9BE8 #按下边框
+    hilited_key_text_color: 0xFFFFFF #按下文字
+    hilited_key_symbol_color: 0xC2D6EA #按下符号
+    hilited_on_key_back_color: 0x3D86C9
+    hilited_on_key_border_color: 0x6FB3E8
+    hilited_on_key_text_color: 0xFFFFFF
+    hilited_on_key_symbol_color: 0xDCEBF9
+    hilited_off_key_back_color: 0x2B3341
+    hilited_off_key_border_color: 0x475365
+    hilited_off_key_text_color: 0xC6D0DC
+    hilited_off_key_symbol_color: 0x8C99A8
+
+    # ── 按键气泡 / 长按弹窗 ──
+    popup_back_color: 0x1F252E #气泡背景
+    popup_text_color: 0xE4EAF2 #气泡文字
+    hilited_popup_back_color: 0x2F6DA8 #气泡选中背景
+    hilited_popup_text_color: 0xFFFFFF #气泡选中文字
+
+    # ── 键盘区 / 液体键盘 / 长文本（剪贴板）──
+    keyboard_back_color: 0x10141A #键盘区背景
+    keyboard_background: 0x10141A #键盘区背景图/色
+    liquid_keyboard_background: 0x14181F #液体键盘背景
+    root_background: 0x10141A #键盘+候选栏整体背景
+    shadow_color: 0x000000 #按键阴影
+    long_text_back_color: 0x1F252E #长文本按键背景（剪贴板）
+    long_text_color: 0xE4EAF2 #长文本按键文字
+
+    # ── 本主题键盘布局引用的一组功能键色（key_back_color: bc1..bc4）──
+    bc1: 0x2A3442 #shift
+    tc1: 0xD8E2EE
+    bc2: 0x46303A #BackSpace（偏红暗色，呼应删除语义）
+    tc2: 0xF0D9DF
+    bc3: 0x2E3A4A #space
+    tc3: 0xE8EFF7
+    bc4: 0x2F6DA8 #enter（用主色）
+    tc4: 0xFFFFFF
+
+liquid_keyboard:
+  # 目前只能直接写参数，不支持变量或者fallback机制。
+  # 缺少参数时，自动从style中加载参数。除非需要指定liquid_keyboard使用与主键盘不同的背景色、背景图，否则不应设置被注释掉的参数。
+  author: "tumuyan"
+  row: 6 #每屏最多显示多少行按键
+  row_land: 5 #横屏每屏最多显示多少行按键
+  key_height: 20 #按键高度
+  key_height_land: 40 #横屏模式按键高度
+  single_width: 50 #single类型的按键宽度
+  vertical_gap: 8 #纵向按键间隙
+  margin_x: 4 #左右按键间隙的1/2
+  fixed_key_bar: # 固定按键条
+    position: bottom # 摆放位置（在滚动区域的……） top|bottom|left|right
+    keys: # 按键（显示名称为对应的label，不能放太多）
+      - liquid_keyboard_exit
+      - space
+      - BackSpace
+  keyboards: [
+      history,
+      ascii,
+      cn,
+      emoji,
+      yanwenzi,
+      clipboard,
+      math,
+      unit,
+      pinyin,
+      grease,
+      exit,
+    ] #tab列表
+  exit:
+    name: 返回
+    type: NO_KEY
+    keys: EXIT
+  history:
+    name: 常用
+    type: HISTORY
+  clipboard:
+    type: CLIPBOARD
+    name: 剪贴
+  math: #tab名称
+    type: SINGLE
+    name: 数学
+    keys: "≈＝≠≌<>≤≥≡()[]{}-+±×*/÷&∥%‰‱°′″∫∮∯∬∭∰∞∑∧∏∈∵∴⊥∝∨∪•√〒∝∽∈∩∧⊙⌒∥∟∣∂∆∞≌∉∪∨⊕⊿⊥∠∫∬∭" #tab中的按键列表
+  emoji:
+    type: SINGLE
+    name: emoji
+    keys: "😀😃😄😁😆😅🤣😂🙂🙃🫠😉😊😇🥰😍🤩😘😗☺😚😙🥲😋😛😜🤪😝🤑🤗🤭🫢🫣🤫🤔🫡🤐🤨😐😑😶🫥😏😒🙄😬🤥😌😔😪🤤😴😷🤒🤕🤢🤮🤧🥵🥶🥴😵🤯🤠🥳🥸😎🤓🧐😕🫤😟🙁☹😮😯😲😳🥺🥹😦😧😨😰😥😢😭😱😖😣😞😓😩😫🥱😤😡😠🤬😈👿💀☠💩🤡👹👺👻👽👾🤖😺😸😹😻😼😽🙀😿😾🙈🙉🙊💌💘💝💖💗💓💞💕💟❣💔❤🧡💛💚💙💜🤎🖤🤍💋💯💢💥💫💦💨🕳💬🗨🗯💭💤👋🤚🖐✋🖖🫱🫲🫳🫴👌🤌🤏✌🤞🫰🤟🤘🤙👈👉👆🖕👇☝🫵👍👎✊👊🤛🤜👏🙌🫶👐🤲🤝🙏✍💅🤳💪🦾🦿🦵🦶👂🦻👃🧠🫀🫁🦷🦴👀👁👅👄🫦👶🧒👦👧🧑👱👨🧔👩🧓👴👵🙍🙎🙅🙆💁🙋🧏🙇🤦🤷👮🕵💂🥷👷🫅🤴👸👳👲🧕🤵👰🤰🫃🫄🤱👼🎅🤶🦸🦹🧙🧚🧛🧜🧝🧞🧟🧌💆💇🚶🧍🧎🏃💃🕺🕴👯🧖🧗🤺🏇⛷🏂🏌🏄🚣🏊⛹🏋🚴🚵🤸🤼🤽🤾🤹🧘🛀🛌👭👫👬💏💑👪🗣👤👥🫂👣🏻🏼🏽🏾🏿🦰🦱🦳🦲🐵🐒🦍🦧🐶🐕🦮🐩🐺🦊🦝🐱🐈🦁🐯🐅🐆🐴🐎🦄🦓🦌🦬🐮🐂🐃🐄🐷🐖🐗🐽🐏🐑🐐🐪🐫🦙🦒🐘🦣🦏🦛🐭🐁🐀🐹🐰🐇🐿🦫🦔🦇🐻🐨🐼🦥🦦🦨🦘🦡🐾🦃🐔🐓🐣🐤🐥🐦🐧🕊🦅🦆🦢🦉🦤🪶🦩🦚🦜🐸🐊🐢🦎🐍🐲🐉🦕🦖🐳🐋🐬🦭🐟🐠🐡🦈🐙🐚🪸🐌🦋🐛🐜🐝🪲🐞🦗🪳🕷🕸🦂🦟🪰🪱🦠💐🌸💮🪷🏵🌹🥀🌺🌻🌼🌷🌱🪴🌲🌳🌴🌵🌾🌿☘🍀🍁🍂🍃🪹🪺🍄🍇🍈🍉🍊🍋🍌🍍🥭🍎🍏🍐🍑🍒🍓🫐🥝🍅🫒🥥🥑🍆🥔🥕🌽🌶🫑🥒🥬🥦🧄🧅🥜🫘🌰🍞🥐🥖🫓🥨🥯🥞🧇🧀🍖🍗🥩🥓🍔🍟🍕🌭🥪🌮🌯🫔🥙🧆🥚🍳🥘🍲🫕🥣🥗🍿🧈🧂🥫🍱🍘🍙🍚🍛🍜🍝🍠🍢🍣🍤🍥🥮🍡🥟🥠🥡🦀🦞🦐🦑🦪🍦🍧🍨🍩🍪🎂🍰🧁🥧🍫🍬🍭🍮🍯🍼🥛☕🫖🍵🍶🍾🍷🍸🍹🍺🍻🥂🥃🫗🥤🧋🧃🧉🧊🥢🍽🍴🥄🔪🫙🏺🌍🌎🌏🌐🗺🗾🧭🏔⛰🌋🗻🏕🏖🏜🏝🏞🏟🏛🏗🧱🪨🪵🛖🏘🏚🏠🏡🏢🏣🏤🏥🏦🏨🏩🏪🏫🏬🏭🏯🏰💒🗼🗽⛪🕌🛕🕍⛩🕋⛲⛺🌁🌃🏙🌄🌅🌆🌇🌉♨🎠🛝🎡🎢💈🎪🚂🚃🚄🚅🚆🚇🚈🚉🚊🚝🚞🚋🚌🚍🚎🚐🚑🚒🚓🚔🚕🚖🚗🚘🚙🛻🚚🚛🚜🏎🏍🛵🦽🦼🛺🚲🛴🛹🛼🚏🛣🛤🛢⛽🛞🚨🚥🚦🛑🚧⚓🛟⛵🛶🚤🛳⛴🛥🚢✈🛩🛫🛬🪂💺🚁🚟🚠🚡🛰🚀🛸🛎🧳⌛⏳⌚⏰⏱⏲🕰🕛🕧🕐🕜🕑🕝🕒🕞🕓🕟🕔🕠🕕🕡🕖🕢🕗🕣🕘🕤🕙🕥🕚🕦🌑🌒🌓🌔🌕🌖🌗🌘🌙🌚🌛🌜🌡☀🌝🌞🪐⭐🌟🌠🌌☁⛅⛈🌤🌥🌦🌧🌨🌩🌪🌫🌬🌀🌈🌂☂☔⛱⚡❄☃⛄☄🔥💧🌊🎃🎄🎆🎇🧨✨🎈🎉🎊🎋🎍🎎🎏🎐🎑🧧🎀🎁🎗🎟🎫🎖🏆🏅🥇🥈🥉⚽⚾🥎🏀🏐🏈🏉🎾🥏🎳🏏🏑🏒🥍🏓🏸🥊🥋🥅⛳⛸🎣🤿🎽🎿🛷🥌🎯🪀🪁🎱🔮🪄🎮🕹🎰🎲🧩🧸🪅🪩🪆♠♥♦♣♟🃏🀄🎴🔫🎭🖼🎨🧵🪡🧶🪢👓🕶🥽🥼🦺👔👕👖🧣🧤🧥🧦👗👘🥻🩱🩲🩳👙👚👛👜👝🛍🎒🩴👞👟🥾🥿👠👡🩰👢👑👒🎩🎓🧢🪖⛑📿💄💍💎🔇🔈🔉🔊📢📣📯🔔🔕🎼🎵🎶🎙🎚🎛🎤🎧📻🎷🪗🎸🎹🎺🎻🪕🥁🪘📱📲☎📞📟📠🔋🪫🔌💻🖥🖨⌨🖱🖲💽💾💿📀🧮🎥🎞📽🎬📺📷📸📹📼🔍🔎🕯💡🔦🏮🪔📔📕📖📗📘📙📚📓📒📃📜📄📰🗞📑🔖🏷💰🪙💴💵💶💷💸💳🧾💹✉📧📨📩📤📥📦📫📪📬📭📮🗳✏✒🖋🖊🖌🖍📝💼📁📂🗂📅📆🗒🗓📇📈📉📊📋📌📍📎🖇📏📐✂🗃🗄🗑🔒🔓🔏🔐🔑🗝💣🔨🪓⛏⚒🛠🗡⚔🪃🏹🛡🪚🔧🪛🔩⚙🗜⚖🦯🔗⛓🪝🧰🧲🪜⚗🧪🧫🧬🔬🔭📡💉🩸💊🩹🩼🩺🩻🚪🛗🪞🪟🛏🛋🪑🚽🪠🚿🛁🪤🪒🧴🧷🧹🧺🧻🪣🧼🫧🪥🧽🧯🛒🧿🪬🚬⚰🪦⚱🗿🪧🪪🏧🚮🚰♿🚹🚺🚻🚼🚾🛂🛃🛄🛅⚠🚸⛔🚫🚳🚭🚯🚱🚷📵🔞☢☣⬆↗➡↘⬇↙⬅↖↕↔↩↪⤴⤵🔃🔄🔙🔚🔛🔜🔝🛐⚛🕉✡☸☯✝☦☪☮🕎🔯♈♉♊♋♌♍♎♏♐♑♒♓⛎🔀🔁🔂▶⏩⏭⏯◀⏪⏮🔼⏫🔽⏬⏸⏹⏺⏏🎦🔅🔆📶📳📴♀♂⚧✖➕➖➗🟰♾‼⁉❓❔❕❗〰💱💲⚕♻⚜🔱📛🔰⭕✅☑✔❌❎➰➿〽✳✴❇©®™🔟🔠🔡🔢🔣🔤🅰🆎🅱🆑🆒🆓ℹ🆔Ⓜ🆕🆖🅾🆗🅿🆘🆙🆚🈁🈂🈷🈶🈯🉐🈹🈚🈲🉑🈸🈴🈳㊗㊙🈺🈵🔴🟠🟡🟢🔵🟣🟤⚫⚪🟥🟧🟨🟩🟦🟪🟫⬛⬜◼◻◾◽▪▫🔶🔷🔸🔹🔺🔻💠🔘🔳🔲🏁🚩🎌🏴🏳"
+  cn:
+    type: SINGLE
+    name: 中文
+    keys: #keys列表可以使用多种格式混合书写。
+      - ，
+      - 。
+      - ？
+      - ！
+      - ：
+      - 、
+      - “
+      - ”
+      - ‘
+      - ···
+      - ……
+      - { click: "——" }
+      - { click: "——", label: "破折" }
+      - （
+      - ）
+      - 【
+      - 】
+      - 《
+      - 》
+      - ［
+      - ］
+      - ｛
+      - ｝
+      - 「
+      - 」
+      - 『
+      - 』
+      - ～
+  unit:
+    name: 单位
+    type: SINGLE
+    keys: "℃¥$€฿￡㎡m³℉￥£￠₠¹²³⁴⁵ⁿ⁶⁷⁸⁹⁰ˣ⁺⁻⁼⁽⁾½⅓¼⅔¾₁₂₃₄₅ₙ₆₇₈₉₀ₓ₊₋₌₍₎℅"
+  pinyin:
+    name: 拼音
+    type: SINGLE
+    keys: "āáǎàōóēéěèǒòīíǐìūúǖǘǚǜǔùêüńň"
+  grease:
+    type: SINGLE
+    name: 希腊
+    keys: "ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩαβγδεζηθικλμνξοπρστυφχψω"
+  ascii:
+    type: SINGLE
+    name: 英文
+    keys: ",.?!:;/\\|*-+=^$`'\"^~@#%&()[]{}_"
+  yanwenzi:
+    type: SINGLE
+    name: "颜文字"
+    keys:
+      [
+        "⎛⎝≥⏝⏝≤⎠⎞",
+        "^_^",
+        "^ω^",
+        "^o^",
+        "~\\(≧▽≦)/~",
+        "*^_^*",
+        "↖(^ω^)↗",
+        "(^o^)／",
+        "(=^▽^=)",
+        "=^_^=",
+        "(*^ω^*)",
+        "٩(๑^o^๑)۶",
+        "o(￣▽￣)o",
+        "Y(^_^)Y",
+        "٩( 'ω' )و",
+        "╰(*´︶`*)╯",
+        "*罒▽罒*",
+        "ヾ ^_^♪",
+        "=￣ω￣=",
+        "︿(￣︶￣)︿",
+        "(´▽｀)ノ♪",
+        "乁( ˙ ω˙乁)",
+        "✧*｡٩(ˊωˋ*)و✧*｡",
+        "～(￣▽￣～)(～￣▽￣)～",
+        "QwQ",
+        "(●—●)",
+        "(๑• . •๑)",
+        "ヾ(≧O≦)〃嗷~",
+        "罒ω罒",
+        "(｡ì _ í｡)",
+        "(๑•ี_เ•ี๑)",
+        "ㄟ(≧◇≦)ㄏ",
+        "(*/ω＼*)",
+        "●▽●",
+        "٩(๑òωó๑)۶",
+        "✺◟(∗❛ัᴗ❛ั∗)◞✺",
+        "( σ'ω')σ",
+        "♡＾▽＾♡",
+        "(๑•̀ㅂ•́)و✧",
+        "(ง •̀_•́)ง",
+        "(｡･ω･｡)ﾉ♡",
+        "(☆_☆)",
+        "(๑°3°๑)",
+        "_(•̀ω•́ 」∠)_",
+        "♪～(´ε｀　)",
+        "～(^з^)-☆",
+        "(´∀｀)♡",
+        "ლ(´ڡ`ლ)",
+        "(＞﹏＜)",
+        "T_T",
+        "⊙︿⊙",
+        "〒▽〒",
+        "⊙﹏⊙",
+        "π_π",
+        "(｡•́︿•̀｡)",
+        "(ToT)/~~~",
+        "╯﹏╰",
+        "ಥ_ಥ",
+        "(╥╯^╰╥)",
+        "(〃′o`)",
+        "●﹏●",
+        "( •̥́ ˍ •̀ू )",
+        "(つд⊂)",
+        "心塞(´-ωก`)",
+        "(╥﹏╥)",
+        "┭┮﹏┭┮",
+        "（；´д｀）ゞ",
+        "(´;︵;`)",
+        "(。﹏。)",
+        "┗( T﹏T )┛",
+        "QAQ",
+        "ヘ(_ _ヘ)",
+        "╰（‵□′）╯",
+        "(*￣︿￣)",
+        ">o<",
+        "(-`ェ´-怒)",
+        "ヽ(‘⌒´メ)ノ",
+        "(*｀Ω´*)v",
+        "(｡•ˇ‸ˇ•｡)",
+        "(怒｀Д´怒)",
+        "٩(๑`^´๑)۶",
+        "(;｀O´)o",
+        "╰_╯",
+        "(#｀皿´)<怒怒怒!!!",
+        "<(｀^´)>",
+        "（｀Δ´）！",
+        "ψ(｀∇´)ψ",
+        "(；′⌒`)",
+        "s(・｀ヘ´・;)ゞ",
+        "(▼皿▼#)",
+        "￣へ￣",
+        "←_←",
+        "（╯‵□′）╯︵┴─┴",
+        "（▼へ▼メ）",
+        "☄ฺ(◣д◢)☄ฺ",
+        "→_→",
+        "⊙_⊙",
+        "d(ŐдŐ๑)",
+        "Σ( ° △ °|||)︴",
+        "(((φ(◎ロ◎;)φ)))",
+        "⊙▽⊙",
+        "(๑ŐдŐ)b",
+        "╭(°A°`)╮",
+        "(๑òᆺó๑)",
+        "⊙ω⊙",
+        "Σ(っ °Д °;)っ",
+        " (ﾟДﾟ≡ﾟдﾟ)!?",
+        "( *・ω・)✄╰ひ╯",
+        "(⊙x⊙;)",
+        "┌(。Д。)┐",
+        "(°ー°〃)",
+        "︽⊙_⊙︽",
+        "!!!∑(°Д°ノ)ノ",
+        "(๑ŐдŐ)b☆d(ŐдŐ๑)",
+        "Σ⊙▃⊙川",
+        "ヽ(*。>Д<)o゜",
+        "━((*′д｀)爻(′д｀*))━!!!!",
+        "=_=",
+        "╮(╯_╰)╭",
+        "（︶︿︶）",
+        "_(:з」∠)_",
+        "@_@",
+        "╮(╯▽╰)╭",
+        "(＠￣ー￣＠)",
+        "_(:3」∠❀)_",
+        "눈_눈",
+        "╭(╯ε╰)╮",
+        "(ー_ー)!!",
+        "_(:D)∠)_",
+        "o_O",
+        "╭(╯^╰)╮",
+        "(；一_一)",
+        "´_>`",
+        "-_-#",
+        "┑(￣Д ￣)┍",
+        "≡￣﹏￣≡",
+        "○|￣|_",
+        "-_-||",
+        "ㄟ( ▔, ▔ )ㄏ",
+        "( ＿ ＿)ノ｜壁",
+        "▄█▀█●",
+      ]
+
+# 工具栏
+tool_bar:
+  button_spacing: 5 # 按钮间距
+
+  # 左侧固定主按钮配置
+  primary_button:
+    # 背景样式设置
+    background:
+      type: circle # 高亮形状 (可选值: circle|rectangle)
+      corner_radius: 10 # 圆角半径
+      normal: 0x00 # 正常状态背景颜色（3.3.12 字段名是 normal，旧名 bg_normal 会被静默忽略）
+      highlight: hilited_candidate_button_color # 高亮状态背景色（旧名 bg_highlight 同样已失效）
+      vertical_inset: 4 # 垂直方向内缩量
+      horizontal_inset: 0 # 水平方向内缩量
+    # 前景内容设置
+    foreground:
+      style: "ic@dots_horizontal" # 内置质感设计图标样式（以ic@开头）
+      normal: candidate_text_color # 正常状态前景色（旧名 fg_normal 已失效；本地图片不允许着色）
+      padding: 10 # 前景内容与背景边界的内边距
+    # 按钮点击事件
+    action: menu_keyboard
+
+  hide_button: &hide_button
+    foreground:
+      style: "ic@keyboard_close"
+      normal: candidate_text_color
+    action: Hide
+
+  emoji_button: &emoji_button
+    foreground:
+      style: "ic@emoticon"
+    # 前景样式可以为空，使用默认样式，按钮将显示为 action 的 label
+    action: liquid_keyboard_emoji
+
+  clipboard_button: &clipboard_button
+    foreground:
+      style: "ic@clipboard"
+    action: clipboard_window
+
+  ascii_mode_button: &ascii_mode_button
+    foreground:
+      option_styles: ["中", "En"] # 样式也可以为表，将根据 action 的 toggle 决定
+      font_size: 18 # 按钮字体大小
+      padding: 10
+    action: Mode_switch
+
+  move_button: &move_button
+    foreground:
+      style: "ic@cursor_text"
+    action: Keyboard_move
+
+  # 同步：两件事一起做 ——
+  #   1) 把【外部存储】/storage/emulated/0/rime 的改动搬进同文真正读写的【私有目录】
+  #      （Android/data/com.osfans.trime/files/rime）。PC 上的改动经 Syncthing 只到得了外部存储，
+  #      这一搬是必须的，见 README 第四节实测；
+  #   2) 把 sync/<设备id>/ 下各设备的 userdb 快照合并进本机词库（词频/输入习惯）。
+  # 之后引擎会重启，配置与词库改动同时生效。
+  # 图标用单圈箭头的 ic@refresh（ic@sync 是双箭头，跟菜单里的「更新配置」撞脸）
+  sync_button: &sync_button
+    foreground:
+      style: "ic@refresh"
+    action: Sync
+
+  # 图标名走 MDI 命名：ic@xxx -> cmd_xxx；不认识的名字会显示空白
+
+  # 右侧按钮列表（从右向左排列）
+  buttons:
+    [
+      *hide_button,
+      *emoji_button,
+      *clipboard_button,
+      *move_button,
+      *ascii_mode_button,
+      *sync_button,
+    ]
+
+#键盘布局
+preset_keyboards:
+  default:
+    author: "暖暖"
+    name: 26键默认布局
+    width: 10
+    height: 40
+    label_transform: uppercase
+    ascii_mode: 0
+    keys:
+      - { click: q, long_click: 1, swipe_up: "1" }
+      - { click: w, long_click: 2, swipe_up: "2" }
+      - { click: e, long_click: 3, swipe_up: "3", swipe_down: CtrlE, hint: "翻译" }
+      - { click: r, long_click: 4, swipe_up: "4", swipe_down: RepeatCommit, hint: "重复" }
+      # T 下滑＝插入当前日期时间戳（不含秒），如 2026-10-14 16:00
+      - { click: t, long_click: 5, swipe_up: "5", swipe_down: Timestamp, hint: "时间" }
+      - { click: y, long_click: 6, swipe_up: "6" }
+      - { click: u, long_click: 7, swipe_up: "7" }
+      - { click: i, long_click: 8, swipe_up: "8" }
+      - { click: o, long_click: 9, swipe_up: "9", swipe_down: CtrlO, hint: "快切" }
+      - { click: p, long_click: 0, swipe_up: "0", swipe_down: CtrlP, hint: "拆字" }
+
+      - { width: 5 }
+      - { click: a, long_click: select_all, swipe_up: select_all }
+      - { click: s, long_click: "+", swipe_up: "+" }
+      - { click: d, long_click: "-", swipe_up: "-", swipe_down: CtrlD, hint: "删段" }
+      # F：下滑＝用浏览器搜（必应）。取的是「光标前的内容」，不取选区（实测）
+      - { click: f, long_click: CtrlF, swipe_up: CtrlF, swipe_down: Bing, hint: "必应" }
+      - { click: g, long_click: "|", swipe_up: "|" }
+      # H：左滑＝收起/展开「符号」小字，下滑＝收起/展开「注解」小字（各是开关，再触发恢复）
+      #    一个键只能跑一个 command，没有"同时藏两个"的命令，所以拆成两个方向
+      - { click: h, long_click: CtrlH, swipe_up: CtrlH, hint: "隐藏", swipe_left: HideSymbols, swipe_down: HideHints }
+      # J：长按/上滑=成对括号、光标居中（跟随中英文：中文态 （）、英文态 ()）；
+      #    下滑=反查（把当前候选注释上屏，与小狼毫物理 Ctrl+J 同效），注解“反查”
+      #    写法同 K：ASCII 字面量交给 Rime punctuator 做状态转换；
+      #    label_symbol 固定写 （），因为键面符号槽不随状态变（hint/label_symbol 同理）
+      - click: j
+        long_click: '(){Left}'
+        swipe_up: '(){Left}'
+        swipe_down: CtrlJ
+        hint: "反查"
+        label_symbol: "（）"
+      # K：长按/上滑=成对的双引号（光标居中，跟随中英文：中文态 “” 、英文态 ""）
+      #    实测（2026-10-15，同文 3.3.11）：ascii 子块是**单个动作 token**（KeyActionToken），
+      #    里面的 long_click/swipe_up 会被丢弃——它只能改「单击」，改不了手势。
+      #    而且手势一旦在主键定义了，英文态也永远用主键动作（KeyView→Key.getAction 短路）。
+      #    ✅ 正确做法：手势动作只写 **ASCII 字面量** ""{Left}——ASCII 字符走
+      #    simulateKeySequence → Rime process_key，由 punctuator 按状态转换：
+      #    中文态自动成 “”，英文态原样 ""（J 的上滑 () 一直是这么生效的）。
+      #    ⚠️ 不要写中文引号字面量（“” 不走 Rime，直接 commitText，永远中文引号）；
+      #    ⚠️ 也不要用预设键 text: "“{Left}”" —— text 里 {Left} 按字面输出（见配置笔记 §5）。
+      - click: k
+        long_click: '""{Left}'
+        swipe_up: '""{Left}'
+        swipe_down: CtrlL
+
+      # L：长按/上滑=分号；下滑=Ctrl+L（整字拆分，Obsidian 里切换待办状态）
+      - { click: l, long_click: ";", swipe_up: ";", swipe_down: CtrlL, hint: "拆字" }
+      - { width: 5 }
+
+      # 上滑/双击＝大写锁定（键面两种状态同色，区分不了，靠手势区分）
+      - { click: Shift_L, double_click: Shift_L3, swipe_up: Shift_L3, width: 15, key_back_color: bc1, key_text_color: tc1 }
+      - { click: z, long_click: "@", swipe_up: "@" }
+      - { click: x, long_click: cut, swipe_up: cut }
+      - { click: c, long_click: copy, swipe_up: copy }
+      # V：长按/上滑=同文剪贴板直贴（不依赖 App 支持 Ctrl+V）；下滑=Ctrl+V（走 App/系统剪贴板）
+      - { click: v, long_click: paste_clip, swipe_up: paste_clip, swipe_down: paste, hint: "CtrlV" }
+      # B：长按/上滑=冒号；下滑=Ctrl+B（Obsidian/Markdown 加粗），注解“加粗”
+      - { click: b, long_click: ":", swipe_up: ":", swipe_down: CtrlB, hint: "加粗" }
+      - { click: n, long_click: "\\", swipe_up: "\\", swipe_down: CtrlN, hint: "新建" }
+      - { click: m, long_click: "_", swipe_up: "_", swipe_down: MT_manager, hint: "MT" }
+      # 退格：上滑=Esc（符号槽写 Esc）、下滑=撤销（注解槽写 撤销）
+      # 退格：上滑=Esc、下滑=撤销、长按=持续删（BackSpace2 预设键自带的 repeatable + slide_delete）
+      # 注：这里不要再挂 popup —— 弹条会和「长按连删」抢手势，结果是长按没反应
+      - {
+          click: BackSpace2,
+          width: 15,
+          key_back_color: bc2,
+          key_text_color: tc2,
+          swipe_up: Escape,
+          swipe_down: undo,
+          label_symbol: "Esc",
+          hint: "撤销",
+        }
+
+      # Ctrl：单击＝按一次 Ctrl（下一次按键带上 Ctrl，如 A=全选、Z=撤销）；
+      # 长按弹条「符号 / 换人」（往右滑选换人）；上滑＝数字键盘
+      # 注：这里不挂 long_click —— 弹条和 long_click 同时存在会让弹条变慢（Enter 没有 long_click，所以快）
+      - {
+          click: Ctrl_L2,
+          popup: [Symbols_panel, Color_switch],
+          swipe_up: Keyboard_number,
+          swipe_right: Symbols_panel,
+          label_symbol: "123",
+          hint: "符号",
+          width: 15,
+        }
+      - { click: ",", label: "，", ascii_label: ",", long_click: ".", swipe_up: ".", width: 15 }
+      - { click: space, long_click: Mode_switch, swipe_up: Mode_switch, width: 40, key_back_color: bc3, key_text_color: tc3, key_text_size: 27 }
+      - { click: "/", long_click: "?", swipe_up: "?", width: 15 }
+      # Enter：点按回车；长按弹条「同文设置 / 系统设置 / 开发者选项」
+      # 弹条按「离手指最近的排第一，其余往另一侧排」——Enter 在右边缘，所以是往左依次排，
+      # 松手＝同文设置，左滑一点＝系统设置，再左滑＝开发者选项
+      # （翻译 Ctrl+E 已挪到 E 的下滑）
+      - {
+          click: Return,
+          composing: Return1,
+          popup: [Settings, SysSettings, DevSettings],
+          swipe_up: Settings,
+          label_symbol: "设置",
+          width: 15,
+          key_back_color: bc4,
+          key_text_color: tc4,
+        }
+
+  number:
+    author: "暖暖"
+    name: 数字+
+    width: 20
+    height: 40
+    ascii_mode: 1
+    keys:
+      - { click: "/", long_click: "[]{Left}", swipe_up: "[]{Left}", width: 13 }
+      - { click: "+", long_click: "{}{Left}", swipe_up: "{}{Left}", width: 13 }
+      - { click: 1 }
+      - { click: 2 }
+      - { click: 3 }
+      - { click: "=", long_click: V_calc, swipe_up: V_calc, width: 13 }
+
+      - { click: "*", long_click: "<>{Left}", swipe_up: "<>{Left}", width: 13 }
+      - { click: "-", long_click: "《》{Left}", swipe_up: "《》{Left}", width: 13 }
+      - { click: 4 }
+      - { click: 5 }
+      - { click: 6 }
+      - { click: space_c, long_click: C_calc, swipe_up: C_calc, key_back_color: bc3, key_text_color: tc3, width: 13 }
+
+      - { click: "%", long_click: "''{Left}", swipe_up: "''{Left}", width: 13 }
+      - { click: "×", long_click: "^", swipe_up: "^", width: 13 }
+      - { click: 7, long_click: select_all }
+      - { click: 8, long_click: copy }
+      - { click: 9, long_click: paste_clip, swipe_down: paste }
+      - {
+          click: BackSpace2,
+          width: 13,
+          key_back_color: bc2,
+          key_text_color: tc2,
+          swipe_up: Escape,
+          swipe_down: undo,
+        }
+
+      - { click: Keyboard_default, width: 13, key_back_color: bc4, key_text_color: tc4 }
+      - { click: "÷", long_click: "……", swipe_up: "……", width: 13 }
+      - { click: liquid_keyboard_switch, long_click: Color_switch, key_back_color: bc1, key_text_color: tc1 }
+      - { click: 0, long_click: cut }
+      - { click: ., long_click: N_date, swipe_up: N_date }
+      - { click: Return, width: 13, key_back_color: bc4, key_text_color: tc4 }
+
+  move:
+    author: "暖暖"
+    name: 光标控制
+    width: 20
+    height: 40
+    ascii_mode: 1
+    keys:
+      - { click: select_all, label: 全选 }
+      - { click: Doc_Home, label: 文首 }
+      - { click: Up, label: "↑", repeatable: true }
+      - { click: Doc_End, label: 文末 }
+      - { click: paste, label: 粘贴 }
+
+      - { click: cut, label: 剪切 }
+      - { click: Left, label: "←", repeatable: true, long_click: Left1, swipe_up: Left1 }
+      - { click: Shift_L2, label: 选择 }
+      - { click: Right, label: "→", repeatable: true, long_click: Right1, swipe_up: Right1 }
+      - { click: Delete, label: Delete, long_click: DeleteCandidate, swipe_up: DeleteCandidate }
+
+      - { click: copy, label: 复制 }
+      - { click: Home, label: Home }
+      - { click: Down, label: "↓", repeatable: true }
+      - { click: End, label: End }
+      - { click: BackSpace2, label: "⌫", repeatable: true, long_click: CtrlBackspace, swipe_up: CtrlBackspace, key_back_color: bc2, key_text_color: tc2 }
+
+      - { click: Keyboard_default, label: "返回", key_back_color: bc4, key_text_color: tc4 }
+      - { click: undo, label: 撤销 }
+      # Ctrl：单击＝按一次 Ctrl（之后按 ←/→ 变 Ctrl+←/→ 跳词）；长按=空格；上滑=Tab
+      - { click: Ctrl_L2, label: "Ctrl", long_click: space, swipe_up: Tab, key_back_color: bc3, key_text_color: tc3 }
+      - { click: redo, label: 重做 }
+      - { click: Return, label: Enter, key_back_color: bc4, key_text_color: tc4 }
+
+preset_keys:
+  # 下滑 M 打开 MT 管理器（Trime 的 run 只吃「包名」或「包名/组件名」，不能带文件路径）
+  MT_manager: { label: MT, functional: false, send: FUNCTION, command: run, option: "bin.mt.plus" }
+
+  # 安卓
+  BRIGHTNESS_DOWN: { label: 亮度-, send: BRIGHTNESS_DOWN }
+  BRIGHTNESS_UP: { label: 亮度+, send: BRIGHTNESS_UP }
+  CALCULATOR: { label: 计算机, send: CALCULATOR }
+  CALENDAR: { label: 日历, send: CALENDAR }
+  CONTACTS: { label: 电话簿, send: CONTACTS }
+  ENVELOPE: { label: 信箱, send: ENVELOPE }
+  EXPLORER: { label: 浏览器, send: EXPLORER }
+  MUSIC: { label: 音乐, send: MUSIC }
+  POWER: { label: 电源, send: POWER }
+  SEARCH: { label: 搜寻, send: Find }
+  SLEEP: { label: 休眠, send: SLEEP }
+  VOICE_ASSIST: { label: 语音, functional: true, send: VOICE_ASSIST }
+  VOLUME_DOWN: { label: 音量-, send: VOLUME_DOWN }
+  VOLUME_UP: { label: 音量+, send: VOLUME_UP }
+  VOLUME_MUTE: { label: 静音, send: VOLUME_MUTE }
+  # 编辑
+  Shift_L: { label: "▲", functional: false, send: Shift_L }
+  Shift_L3: { label: "▲", functional: false, send: Shift_L, shift_lock: click }
+  Return:
+    { label: enter_labels, preview: "↩", functional: false, send: Return }
+  Return1: { label: "确定", preview: "↩", functional: false, send: Return }
+  Hide: { label: 隐藏, send: BACK }
+  BackSpace:
+    { label: "⌫", repeatable: true, functional: false, send: BackSpace }
+  BackSpace2:
+    { label: "⌫", repeatable: true, functional: false, send: BackSpace, slide_delete: true }
+  space:
+    {
+      repeatable: true,
+      preview: "⎵",
+      functional: false,
+      label: "＿＿＿",
+      send: space,
+      slide_cursor: true,
+    }
+  space1:
+    {
+      repeatable: true,
+      label: "⎵",
+      functional: false,
+      send: space,
+      slide_cursor: true,
+    }
+  # 数字区空格：不带 repeatable / slide_cursor，好让键级的长按、上滑生效（输出 C）
+  space_c:
+    {
+      label: "⎵",
+      functional: false,
+      send: space,
+    }
+  Clear: { label: 清空, send: Clear }
+  Escape: { label: 取消, functional: false, send: Escape }
+  Home: { label: Home, send: Home, functional: false }
+  Insert: { label: 插入, send: Insert }
+  Delete: { label: Delete, send: Delete, functional: false }
+  End: { label: End, send: End, functional: false }
+  Doc_Home: { label: 文首, send: Control+Home, functional: false }
+  Doc_End: { label: 文末, send: Control+End, functional: false }
+  Page_Up: { label: 上页, send: Page_Up, functional: false }
+  Page_Down: { label: 下页, send: Page_Down, functional: false }
+  Left: { label: "←", send: Left, repeatable: true, functional: false }
+  Down: { label: "↓", send: Down, repeatable: true, functional: false } #repeatable 才有长按连发
+  Up: { label: "↑", send: Up, repeatable: true, functional: false } #repeatable 才有长按连发
+  Right: { label: "→", send: Right, repeatable: true, functional: false }
+  select_all: { label: 全选, functional: false, send: Control+a }
+  CtrlP: { label: 拆字, functional: false, send: Control+p }
+  CtrlL: { label: 拆字, functional: false, send: Control+l }
+  # I 下滑：把当前候选的「注释」直接上屏
+  # 例：a → 候选「啊」→ 下滑 P 拆字成注释「kk 口可」→ 下滑 I 把这串注释打出去
+  # 实现走 lua/commit_comment.lua（key_binder 的 send: commit_comment 实测无效）
+  CtrlJ: { label: 注释, functional: false, send: Control+j }
+  CtrlE: { label: 翻译, functional: false, send: Control+e }
+  CtrlD: { label: 删段, functional: false, send: Control+d }
+  CtrlN: { label: 新建, functional: false, send: Control+n }
+  CtrlF: { label: 查找, functional: false, send: Control+f }
+  CtrlH: { label: 替换, functional: false, send: Control+h }
+  CtrlO: { label: 快切, functional: false, send: Control+o } #Obsidian 快速切换
+  CtrlB: { label: 加粗, functional: false, send: Control+b } #Markdown 加粗
+  cut: { label: 剪切, functional: false, send: Control+x }
+  copy: { label: 复制, functional: false, send: Control+c }
+  paste: { label: 粘贴, functional: false, send: Control+v }
+  paste_clip: { label: 粘贴, send: function, command: clipboard }
+  paste_text: { label: 貼上文本, send: Control+Shift+Alt+v } #>=Android 6.0
+  RepeatCommit: { label: 重复, command: commit, option: "%1$s" } #重复上屏刚打出的内容（等同内置主题同名键）
+  share_text: { label: 分享文本, send: Control+Alt+s } #>=Android 6.0
+  redo: { label: 重做, functional: false, send: Control+Shift+z } #>=Android 6.0
+  undo: { label: 撤銷, functional: false, send: Control+z } #>=Android 6.0
+  delimiter: { label: 分词, text: "'" }
+  x1: { text: "{Home}{Right}{Right}", label: 单字, functional: false }
+  x2:
+    {
+      text: "{Home}{Right}{Right}{Right}{Right}",
+      label: 二字,
+      functional: false,
+    }
+  x3:
+    {
+      text: "{Home}{Right}{Right}{Right}{Right}{Right}{Right}",
+      label: 三字,
+      functional: false,
+    }
+  x4:
+    {
+      text: "{Home}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}",
+      label: 四字,
+      functional: false,
+    }
+  # x1: {text: '{Home}{Right}{Right}', label: 单字, functional: false}
+  # rime组合键
+  F4: { label: 方案菜单, send: F4 }
+  BackToPreviousSyllable: { label: 删音节, send: Control+BackSpace }
+  CtrlBackspace: { label: 删词, send: Control+BackSpace, functional: false }
+  CommitRawInput: { label: 编码, send: Control+Return }
+  CommitScriptText: { label: 编码, send: Shift+Return }
+  CommitComment: { label: 编码, send: Control+Shift+Return }
+  DeleteCandidate: { label: 删词, send: Control+Delete, functional: false }
+  #切换键盘
+  Keyboard_letter:
+    { label: 字母, functional: true, send: Eisu_toggle, select: default }
+  Keyboard_default:
+    { label: 返回, functional: false, send: Eisu_toggle, select: .default }
+  Keyboard_switch:
+    { label: 键盘, functional: true, send: Eisu_toggle, select: .next }
+  Keyboard_number:
+    { label: 123, functional: false, send: Eisu_toggle, select: number }
+  Keyboard_symbols:
+    { label: 更多, functional: false, send: Eisu_toggle, select: symbols }
+  # 打开液体键盘的「常用」页（option 用的是 tab 名，不是 tab 键名）
+  Symbols_panel:
+    { label: 符号, send: function, command: liquid_keyboard, option: "常用" }
+  Keyboard_move: { label: "ic@cursor_text", functional: true, send: Eisu_toggle, select: move, toggle: move }
+  Keyboard_next:
+    { label: 后退, functional: false, send: Eisu_toggle, select: .next }
+  Keyboard_last:
+    { label: 后退, functional: false, send: Eisu_toggle, select: .last }
+  Keyboard_last_lock: { label: 返回, send: Eisu_toggle, select: .last_lock } #直接切換到下一键盘
+  liquid_keyboard_exit: {
+      label: 返回,
+      send: function,
+      command: liquid_keyboard,
+      option: "-1",
+    } #退出liquidkeyboard
+  liquid_keyboard_switch:
+    { label: ⌘, send: function, command: liquid_keyboard, option: "常用" }
+  liquid_keyboard_emoji:
+    { label: 🙂, send: function, command: liquid_keyboard, option: "emoji" }
+  menu_keyboard: { label: 菜单, send: function, command: menu_keyboard }
+  clipboard_window:
+    {
+      label: "剪贴",
+      send: function,
+      command: "liquid_keyboard",
+      option: "剪贴",
+    }
+  # rime状态
+  Mode_switch:
+    {
+      toggle: ascii_mode,
+      functional: false,
+      send: SWITCH_CHARSET,
+      states: [中文, 西文],
+    }
+  Zenkaku_Hankaku:
+    { toggle: full_shape, send: SWITCH_CHARSET, states: [半角, 全角] }
+  Henkan: { toggle: simplification, send: SWITCH_CHARSET, states: [汉字, 汉字] }
+  Charset_switch:
+    { toggle: extended_charset, send: SWITCH_CHARSET, states: [常用, 增广] }
+  Punct_switch: { toggle: ascii_punct, send: SWITCH_CHARSET, states: [。，, ．，] }
+  # trime设置
+  IME_switch: { label: 🌐, send: LANGUAGE_SWITCH } #彈出對話框選擇輸入法
+  IME_last: { label: 上一输入法, send: LANGUAGE_SWITCH, select: .last } #直接切換到上一輸入法
+  IME_next: { label: 下一输入法, send: LANGUAGE_SWITCH, select: .next } #直接切換到下一輸入法
+  Schema_switch: { label: 下一方案, functional: false, send: Control+Shift+1 }
+  Schema_Eng: { label: En, functional: true, send: Control+Shift+0 }
+  Theme_settings: { label: 主题, send: SETTINGS, option: "theme" }
+  Color_switch: { label: 换人, functional: false, send: PROG_RED }
+  Help: { label: 说明, send: Help }
+  Info: { label: 关于, send: INFO }
+  Menu: { label: 方案, functional: false, send: MENU }
+  Settings: { label: 设置, functional: false, send: SETTINGS }
+  # 打开安卓系统设置（同文自己的设置页是上面的 Settings，这个才是 System Settings）
+  # option 为「包名/组件名」，主设置页绝大多数 ROM 都是 com.android.settings/.Settings
+  # 若无效，可依次换成：option: "com.android.settings"（只给包名，走启动器入口）
+  #                   option: "android.settings.SETTINGS"（若同文把 option 当 action 发）
+  #                   option: "android.settings.INPUT_METHOD_SETTINGS"（直接到「语言和输入法」）
+  SysSettings:
+    {
+      label: 系统,
+      send: function,
+      command: run,
+      option: "com.android.settings/.Settings",
+    }
+  # 开发者选项
+  # ⚠️ 实测：同文的 `run` 只认「包名/组件名」，**不认 action 字符串**
+  #    （曾试 option: "android.settings.APPLICATION_DEVELOPMENT_SETTINGS" → 弹条能选中但点了没反应）
+  # 组件名两台实测一致（IQOO/OriginOS 与 Redmi/HyperOS 都解析到同一个）：
+  #    cmd package resolve-activity -a android.settings.APPLICATION_DEVELOPMENT_SETTINGS
+  #    → com.android.settings/.Settings$DevelopmentSettingsActivity
+  # 换 ROM 若失效，用上面那条命令重新解析即可
+  DevSettings:
+    {
+      label: 开发者,
+      send: function,
+      command: run,
+      option: "com.android.settings/.Settings$DevelopmentSettingsActivity",
+    }
+  # 收起/展开全键盘的小字（两个槽分开控制，各是开关）
+  HideSymbols:
+    { label: 隐藏, send: function, command: switch_hide_key_symbol }
+  HideHints:
+    { label: 注解, send: function, command: switch_hide_key_hint }
+  # trime命令
+  Deploy: { label: 部署, command: apply, option: "DEPLOY" } #重新部署：重建 build/，等价于设置页右上角 ↶（工具栏已不放此按钮，需要时从 Enter 上滑 → 同文设置里按）
+  Sync: { label: 同步, command: apply, option: "SYNC_USER_DATA" } #同步：外部存储 → 私有目录 的改动搬运 + 合并各设备 userdb 快照 + 重启引擎 —— PC 改完配置后按这一下
+  UpdateConfig: { label: 更新配置, command: apply, option: "UPDATE_CONFIG" } #更新配置：只重启引擎、重读配置，不做 外部存储 → 私有目录 的同步。实测(2026-10-16)：PC 的改动只到外部存储时按它无效，所以工具栏不放这个按钮；想加回工具栏就在 tool_bar 段补一个 action: UpdateConfig 的按钮锚点、再写进 buttons 列表
+  Date: { label: 日期, send: function, command: date, option: " yyyy-MM-dd " }
+  Time: { label: 時間, send: function, command: date, option: "HH:mm:ss" } #時間： date 格式
+  TrimeApp: {
+      label: 同文,
+      send: function,
+      command: run,
+      option: "com.osfans.trime",
+    } #運行程序: run 包名
+  TrimeCmp: {
+      label: 同文組件,
+      send: function,
+      command: run,
+      option: "com.osfans.trime/.Pref",
+    } #運行程序指定組件: run 包名/組件名
+  Homepage: {
+      label: 同文主頁,
+      send: function,
+      command: run,
+      option: "https://github.com/osfans/trime",
+    } #查看網頁: run 網址
+  Wiki: {
+      label: 維基,
+      send: function,
+      command: run,
+      option: "https://zh.wikipedia.org/wiki/%s",
+    } #搜索網頁: %s或者%1$s爲當前字符
+  Google: {
+      label: 谷歌,
+      send: function,
+      command: run,
+      option: "https://www.google.com/search?q=%s",
+    } #搜索網頁: %s或者%1$s爲當前字符
+  MoeDict: {
+      label: 萌典,
+      send: function,
+      command: run,
+      option: "https://www.moedict.tw/%3$s",
+    } #搜索網頁: %3$s爲光標前字符
+  Baidu: {
+      label: 百度搜索,
+      send: function,
+      command: run,
+      option: "https://www.baidu.com/s?wd=%4$s",
+    } #搜索網頁: %4s爲光標前所有字符
+  Zdic: {
+      label: 漢典,
+      send: function,
+      command: run,
+      option: "http://www.zdic.net/sousuo/?q=%1$s",
+    } #搜索網頁: %s或者%1$s爲當前字符
+  Zdic2: {
+      label: 漢典,
+      send: function,
+      command: run,
+      option: "http://www.zdic.net/sousuo/?q=%2$s",
+    } #搜索網頁: %2$s爲當前輸入的編碼
+  WebSearch: {
+      label: 搜索網頁,
+      send: function,
+      command: web_search,
+      option: "%4$s",
+    } #搜索，其他view、dial、edit、search等intent，參考安卓的intent文檔：https://developer.android.com/reference/android/content/Intent.html
+
+  # 必应搜索：走浏览器。%4$s = 光标之前的内容（实测：不含选区、可以跨多行）
+  Bing:
+    {
+      label: 必应,
+      send: function,
+      command: run,
+      option: "https://www.bing.com/search?q=%4$s",
+    }
+  Left1: { label: "⇦", send: Control+Left, repeatable: true, functional: false }
+  Right1:
+    { label: "⇨", send: Control+Right, repeatable: true, functional: false }
+  Shift_L2: { label: 选择, preview: "⇪", functional: false, send: Shift_L }
+  Ctrl_L2: { label: Ctrl, preview: "⌃", functional: false, send: Control_L }
+
+  # 22自定义功能键
+  Keyboard_defaulten:
+    { label: EN, functional: false, send: Eisu_toggle, select: letter }
+  Schema_switchen1: { label: EN, send: Control+Shift+5, functional: true }
+  Schema_switchen: { label: EN, send: Control+Shift+5, functional: false }
+  Schema_switchcn: { label: 中文, send: Control+Shift+6, functional: false }
+  Keyboard_v2: { label: "✾", functional: false, send: v }
+  Keyboard_r2: { label: "❀", functional: false, send: r }
+  Keyboard_fc: { label: "'分词", send: apostrophe, functional: false }
+  Control_L: { label: "退格", send: Control_L, functional: false }
+
+  # aoeiu功能键
+  Keyboard_a:
+    { label: "A", functional: false, send: asciicircum, key_text_color: bct0 }
+  Keyboard_u:
+    { label: "U", functional: false, send: exclam, key_text_color: bct0 }
+  Keyboard_i:
+    { label: "I", functional: false, send: question, key_text_color: bct0 }
+  Keyboard_o:
+    { label: "O", functional: false, send: comma, key_text_color: bct0 }
+  Keyboard_e:
+    { label: "E", functional: false, send: period, key_text_color: bct0 }
+
+  Keyboard_a3: { label: "……", functional: false, send: asciicircum }
+
+  Zcj: { label: 单字, functional: false, text: "{Home}{Right}{Right}" }
+  Tab: { label: Tab, send: Tab }
+  Tab1: { label: Tab, functional: false, send: Tab }
+  # 数字区手势键：上滑/长按输出大写 V / N，用于触发 V计算器 与 N日期
+  V_calc: { label: V, functional: false, text: "V" }
+  N_date: { label: N, functional: false, text: "N" }
+  C_calc: { label: C, functional: false, text: "C" }
+  # T 下滑：插入当前日期时间（本地时区，不含秒），格式 2026-10-14 16:00
+  # 用 Trime 内置的 date 命令（option 是 Android SimpleDateFormat），不需要 lua
+  Timestamp: { label: "时间", send: function, command: date, option: "yyyy-MM-dd HH:mm" }
+  space_R1:
+    { label: "EN", functional: false, send: Eisu_toggle, select: letter }
+  space_R2: { label: "中", functional: false, send: Eisu_toggle, select: fbj }
+  Paren_cn: { label: "（）", text: "（{Left}）", send: text, functional: false }
+  Paren_en: { label: "()", text: "({Left})", send: text, functional: false }

@@ -1,0 +1,143 @@
+# 小狼毫（Weasel）外观 —— 「石青 / 松烟」一对，跟随 Windows 深浅色自动切换
+#
+# 机制：Weasel 0.17.4 读注册表 HKCU\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize
+#       → **SystemUsesLightTheme**（1=浅色；实测不看 AppsUseLightTheme），
+#       据此在 style/color_scheme 与 style/color_scheme_dark 之间选。
+#       两个键都写了才会切；只写 color_scheme 就是固定一套。
+#       响应 WM_SETTINGCHANGE/ImmersiveColorSet —— 在系统里切深色是实时变的。
+#
+# 生效链路（少一步都不变）：改本文件 → WeaselDeployer.exe /deploy 生成 build\weasel.yaml
+#       → 重启 WeaselServer.exe 读新 build。只改文件、或只重启，都不会变。
+#
+# ⚠️ 颜色是 0xBBGGRR（BGR 顺序），不是 RGB！写 RGB 会把石青写成棕色。
+#    每个值后面 `#` 注释里是它对应的 RGB，改色时照 RGB 写、再交换 R/B 两字节。
+#
+# ⚠️ 打开「小狼毫 设置」面板点保存，这个文件会被整段重写成单行 flow（2026-10-18 实测：
+#    generator 变成 Weasel::UIStyleSettings），注释全丢，但四套方案都会保留下来，
+#    所以单行只是不好看、不影响使用。要注意的是面板会把它当时选中的方案写进
+#    style/color_scheme（实测被写成 mint_light_blue），那就固定成那一套了，记得改回来。
+customization:
+  distribution_code_name: Weasel
+  distribution_version: 0.17.4
+  generator: "Weasel::UIStyleSettings"
+  modified_time: "Sun Oct 18 12:56:00 2026"
+  rime_version: 1.13.1
+patch:
+  preset_color_schemes:
+    # 原有方案（Mintimate 的「黑水鸭」）：值一个字没动，只是从单行 flow 改回多行
+    mint_dark_blue:
+      alpha: 1
+      author: "Mintimate <\"Mintimate's Blog\">"
+      back_color: 0x424242
+      base_offset: 0
+      candidate_text_color: 0xefefef
+      comment_text_color: 0xC0A98F
+      hilited_candidate_back_color: 0xc6c01a
+      hilited_candidate_label_color: 0xefefef
+      hilited_candidate_text_color: 0xefefef
+      hilited_comment_text_color: 0xffffff
+      hilited_text_color: 0xc6c01a
+      label_color: 0xefefef
+      line_spacing: 5
+      mutual_exclusive: false
+      name: "黑水鸭／Mint Dark Blue"
+      shadow_size: 0
+      spacing: 10
+      text_color: 0x6495ed
+      translucency: false
+    # 原有方案（Mintimate 的「蓝水鸭」）：同上
+    mint_light_blue:
+      alpha: 1
+      author: "Mintimate <\"Mintimate's Blog\">"
+      back_color: 0xefefef
+      base_offset: 0
+      candidate_text_color: 0x424242
+      comment_text_color: 0xA68C6D
+      hilited_candidate_back_color: 0xed9564
+      hilited_candidate_label_color: 0xefefef
+      hilited_candidate_text_color: 0xefefef
+      hilited_comment_text_color: 0xefefef
+      hilited_text_color: 0xed9564
+      label_color: 0xcac9c8
+      line_spacing: 5
+      mutual_exclusive: false
+      name: "蓝水鸭／Mint Light Blue"
+      shadow_size: "0                       `"
+      spacing: 10
+      text_color: 0x6495ed
+      translucency: true
+
+    # ── 石青：浅色（和手机同文那套同一个色系）────────────────────────────
+    shiqing:
+      name: 石青／Shiqing
+      author: cxk
+      back_color: 0xF0EBE7 # #E7EBF0 比纸白降两档，长时间看不刺眼
+      border_color: 0xB19F8F # #8F9FB1 描边
+      shadow_color: 0x1A241A0F # #0F1A24 @10%，极淡的一层冷灰，替代渐变
+      text_color: 0x75532A # #2A5375 编码文字
+      hilited_text_color: 0x4B3214 # #14324B 正在打的那一段
+      hilited_back_color: 0xEBDCCF # #CFDCEB 编码底纹
+      candidate_text_color: 0x322A23 # #232A32 候选词
+      candidate_back_color: 0xF0EBE7 # 与窗同色＝不出现色块
+      hilited_candidate_text_color: 0xFFFFFF #选中项文字
+      hilited_candidate_back_color: 0x9E6E3F # #3F6E9E 选中项底色：石青
+      label_color: 0x887B6F # #6F7B88 序号
+      hilited_label_color: 0xF9F2EA # #EAF2F9 选中项序号
+      comment_text_color: 0xA37F5C # #5C7FA3 提示/注释：偏蓝，与正文灰黑分开
+      hilited_comment_text_color: 0xF4E9DC # #DCE9F4
+      hilited_mark_color: 0x9E6E3F # #3F6E9E 光标标记
+      prevpage_color: 0xA6988B # #8B98A6 翻页箭头
+      nextpage_color: 0xA6988B # #8B98A6 翻页箭头
+      alpha: 1
+      translucency: false
+
+    # ── 松烟：深色 ───────────────────────────────────────────────────
+    songyan:
+      name: 松烟／Songyan
+      author: cxk
+      back_color: 0x1F1A16 # #161A1F 候选窗底，比纯黑偏蓝一点
+      border_color: 0x685A4E # #4E5A68（暗底上要提亮才看得见）
+      shadow_color: 0x66000000 # #000000 @40%
+      text_color: 0xD8BE9D # #9DBED8
+      hilited_text_color: 0xFBF3EA # #EAF3FB
+      hilited_back_color: 0x3B3022 # #22303B
+      candidate_text_color: 0xECE7E3 # #E3E7EC
+      candidate_back_color: 0x1F1A16
+      hilited_candidate_text_color: 0xFDF8F2 # #F2F8FD
+      hilited_candidate_back_color: 0x8F7043 # #43708F 选中项：雾蓝
+      label_color: 0x94887E # #7E8894
+      hilited_label_color: 0xF2E2CF # #CFE2F2
+      comment_text_color: 0xC9A67F # #7FA6C9 提示/注释：暗底上偏暖蓝
+      hilited_comment_text_color: 0xECDFCF # #CFDFEC
+      hilited_mark_color: 0xC8A374 # #74A3C8
+      prevpage_color: 0x83766C # #6C7683
+      nextpage_color: 0x83766C
+      alpha: 1
+      translucency: false
+
+  # 跟随系统：浅色用石青，深色用松烟
+  "style/color_scheme": shiqing
+  "style/color_scheme_dark": songyan
+
+  # 字体（三种字体分开设，序号/注释才不会跟正文撞风格）
+  "style/font_face": "Microsoft YaHei"
+  "style/label_font_face": "Microsoft YaHei"
+  "style/comment_font_face": "Microsoft YaHei"
+  "style/font_point": 14
+  "style/label_font_point": 14 #与正文对齐
+  "style/comment_font_point": 14 #与正文对齐
+
+  # 外形：2px 实描边、圆角、留白不放太大，整体是一块安静的纸
+  "style/horizontal": false
+  "style/inline_preedit": false #false=编码画在候选窗顶上那行（true 才是跟着应用光标走）
+  "style/layout/border_width": 4 # 默认 3
+  "style/layout/round_corner": 10
+  "style/layout/margin_x": 14
+  "style/layout/margin_y": 10
+  "style/layout/spacing": 10
+  "style/layout/candidate_spacing": 8
+  "style/layout/hilite_spacing": 4
+  "style/layout/hilite_padding": 6
+  "style/layout/shadow_radius": 14
+  "style/layout/shadow_offset_x": 2
+  "style/layout/shadow_offset_y": 4
