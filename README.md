@@ -356,3 +356,46 @@ pause >nul
 - [白霜词库](https://github.com/gaboolic/rime-frost) / [雾凇拼音](https://github.com/iDvel/rime-ice) —— 词库与词频来源
 - [同文 Trime](https://github.com/osfans/trime) —— 安卓端输入法平台
 - [小狼毫 Weasel](https://github.com/rime/weasel) —— Windows 端输入法平台
+
+---
+
+## 关于本仓库（公开分享版）
+
+本仓库是一份个人自用配置的公开镜像，由本地脚本从私人仓库生成：
+
+- 涉及个人用词习惯的几个文件被替换成 **示例版**，只保留格式与用法；
+- 个人笔记不随仓库发布；
+- 其余方案文件与上游 [gaboolic/rime-moqi](https://github.com/gaboolic/rime-moqi) 保持一致。
+
+被替换成示例版的 4 个文件：
+
+| 文件 | 用途 |
+| --- | --- |
+| `custom_phrase/custom_phrase.txt` | 主自定义词表（`table_translator@custom_phrase`） |
+| `custom_phrase/custom_short.txt` | 手写短码词表 |
+| `custom_phrase/custom_extend.txt` | 扩展词源文件（脚本生成 `cn_dicts_common/custom_extend.dict.yaml`） |
+| `symbols_caps_v.yaml` | 大写键符号表 |
+
+### 三个本地脚本
+
+| 脚本 | 作用 | 什么时候跑 |
+| --- | --- | --- |
+| `Rime词库管理.py` | `custom_phrase/custom_extend.txt` → `cn_dicts_common/custom_extend.dict.yaml`，自动补小鹤辅码 | 改过 `custom_extend.txt` 之后 |
+| `生成super4.py` | `custom_phrase/custom_phrase_super_4jian_no_conflict.txt` → `super4.dict.yaml`（四字词反查表） | 改过那个 txt 之后 |
+| `Rime词库排序.py` | 给 `custom_phrase/custom_short.txt` 重新排序（自动生成 `.bak` 备份） | 改过 `custom_short.txt` 之后 |
+
+运行需要 Python 3.9+ 和 `pypinyin`：
+
+```powershell
+pip install pypinyin
+python Rime词库管理.py
+```
+
+> `custom_extend.dict.yaml` 上游没有提供，所以本仓库附带的是按示例词表生成的一份结果。
+> 你自己改完 `custom_extend.txt` 之后，**跑一遍 `Rime词库管理.py`**，再「重新部署」即可；
+> 辅码表取自仓库自带的 `program/moran.chars.dict.yaml` 与 `program/flypydz.yaml`，不用另外下载。
+
+### 部署
+
+把本仓库内容放进 Rime 的用户目录（Windows 是 `%APPDATA%\Rime`），然后「重新部署」。
+`squirrel` / `weasel` / `小狼毫` / `同文输入法` 的部署入口见方案正文。

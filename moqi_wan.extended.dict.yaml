@@ -30,7 +30,7 @@ import_tables:
   # - cn_dicts_common/chengyu   # 成语
   - cn_dicts_common/changcijian   # 多字
   - cn_dicts_common/changcijian3   # 3字
-  # - cn_dicts_common/custom_extend # 自定义扩展词库：改 custom_phrase/custom_extend.txt → 跑 Rime词库管理.py → 取消本行注释 → 重新部署（详见 README）
+  - cn_dicts_common/custom_extend # 自定义扩展词库（含辅助码）
 
   # 细胞词库
   - cn_dicts_cell/medication
