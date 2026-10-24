@@ -2,8 +2,10 @@
 # -*- coding: utf-8 -*-
 """从 ms.trime.yaml 生成 my.trime.yaml。
 
-my.trime.yaml = ms.trime.yaml + 最上面一排修饰键（Ctrl / Win / Alt），
-专供需要 Alt/Win 快捷键的场景（比如 Obsidian 移动版的 Alt 快捷键）。
+my.trime.yaml = ms.trime.yaml + 最上面一排修饰键（Ctrl / Tab / Alt），
+专供需要 Alt/Tab 的场景（比如 Obsidian 移动版的 Alt 快捷键）。
+第二格原本是 Win：实测只在英文状态生效（中文态要先出候选、拿不到 Meta 组合），
+作用有限，2026-10-24 换成更常用的 Tab。
 日常只改 ms.trime.yaml，改完跑一次本脚本，再在「键盘样式」里切到「全键」。
 
 用法：
@@ -49,7 +51,7 @@ def main() -> None:
     elif NAME_NEW not in text:
         die("没找到主题名那一行（name: 魔裁）")
 
-    # 2. Tab 键预设（原来这里是 Win_L2，同文把 Meta 送成 229，WebView 认不出来，改成 Tab）
+    # 2. Tab 键预设（原来这里是 Win_L2；Win 只在英文态能用、价值不大，换成 Tab）
     if "Tab_L:" not in text:
         if ALT_ANCHOR not in text:
             die("没找到 Alt_L2 预设，无法插入 Tab_L")
