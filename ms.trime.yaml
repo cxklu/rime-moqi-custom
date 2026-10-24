@@ -23,7 +23,7 @@ style:
   comment_text_size: 10 #编码提示字号（“标准”就是 10；再大就把候选挤成一条）
   hanb_font: hanb.ttf #扩充字体
   horizontal: true #水平模式
-  horizontal_gap: 12 #键水平间距
+  horizontal_gap: 8 #键水平间距
   # 候选窗交给 3.3 内置渲染。旧版这一整段（layout: 的 max_length/max_width/sticky_lines/
   # max_entries/all_phrases…，以及 window: 的模板列表）在 3.3 里都不再被读取，留着只会
   # 让人以为能调；旧模板还会让候选窗按模板宽度算，长候选（DeepSeek Harness）只露出一条。
@@ -510,7 +510,7 @@ liquid_keyboard:
   key_height: 20 #按键高度
   key_height_land: 40 #横屏模式按键高度
   single_width: 50 #single类型的按键宽度
-  vertical_gap: 8 #纵向按键间隙
+  vertical_gap: 2 #纵向按键间隙
   margin_x: 4 #左右按键间隙的1/2
   fixed_key_bar: # 固定按键条
     position: bottom # 摆放位置（在滚动区域的……） top|bottom|left|right
@@ -831,8 +831,8 @@ preset_keyboards:
     label_transform: uppercase
     ascii_mode: 0
     keys:
-      - { click: q, long_click: 1, swipe_up: "1" }
-      - { click: w, long_click: 2, swipe_up: "2" }
+      - { click: q, long_click: 1, swipe_up: "1", swipe_down: AppQQ, hint: "QQ" }
+      - { click: w, long_click: 2, swipe_up: "2", swipe_down: AppWeChat, hint: "微信" }
       - { click: e, long_click: 3, swipe_up: "3", swipe_down: CtrlE, hint: "翻译" }
       - { click: r, long_click: 4, swipe_up: "4", swipe_down: RepeatCommit, hint: "重复" }
       # T 下滑＝插入当前日期时间戳（不含秒），如 2026-10-14 16:00
@@ -840,13 +840,14 @@ preset_keyboards:
       - { click: y, long_click: 6, swipe_up: "6" }
       - { click: u, long_click: 7, swipe_up: "7" }
       - { click: i, long_click: 8, swipe_up: "8" }
-      - { click: o, long_click: 9, swipe_up: "9", swipe_down: CtrlO, hint: "快切" }
+      - { click: o, long_click: 9, swipe_up: "9", swipe_down: AppObsidian, hint: "Ob" }
       - { click: p, long_click: 0, swipe_up: "0", swipe_down: CtrlP, hint: "拆字" }
 
+      # Ctrl：借 A 左边那 5% 空隙放一个细 Ctrl，A 的位置完全不动；点按挂起 Control、再点取消
       - { width: 5 }
       - { click: a, long_click: select_all, swipe_up: select_all }
-      - { click: s, long_click: "+", swipe_up: "+" }
-      - { click: d, long_click: "-", swipe_up: "-", swipe_down: CtrlD, hint: "删段" }
+      - { click: s, long_click: "+", swipe_up: "+", swipe_down: SendS, hint: "保存" }
+      - { click: d, long_click: "-", swipe_up: "-", swipe_down: AppDouyin, hint: "抖音" }
       # F：下滑＝用浏览器搜（必应）。取的是「光标前的内容」，不取选区（实测）
       - { click: f, long_click: CtrlF, swipe_up: CtrlF, swipe_down: Bing, hint: "必应" }
       - { click: g, long_click: "|", swipe_up: "|" }
@@ -879,7 +880,8 @@ preset_keyboards:
 
       # L：长按/上滑=分号；下滑=Ctrl+L（整字拆分，Obsidian 里切换待办状态）
       - { click: l, long_click: ";", swipe_up: ";", swipe_down: CtrlL, hint: "拆字" }
-      - { width: 5 }
+      - { width: 4 }
+      - { width: 1 }
 
       # 上滑/双击＝大写锁定（键面两种状态同色，区分不了，靠手势区分）
       - { click: Shift_L, double_click: Shift_L3, swipe_up: Shift_L3, width: 15, key_back_color: bc1, key_text_color: tc1 }
@@ -906,21 +908,20 @@ preset_keyboards:
           hint: "撤销",
         }
 
-      # Ctrl：单击＝按一次 Ctrl（下一次按键带上 Ctrl，如 A=全选、Z=撤销）；
-      # 长按弹条「符号 / 换人」（往右滑选换人）；上滑＝数字键盘
-      # 注：这里不挂 long_click —— 弹条和 long_click 同时存在会让弹条变慢（Enter 没有 long_click，所以快）
+      # 底排：123 | Ctrl | ， | 空格 | / | 中英 | Enter
+      # 123：点按＝数字区；上滑＝符号区（常用）；长按弹条＝「符号 / 换人」
+      # 双击做不了：点按已把键盘切成数字区，第二次点击落在数字键盘上（实测）。
+      # 注：123 不挂 long_click —— 弹条和 long_click 同时存在会让弹条变慢
       - {
-          click: Ctrl_L2,
-          popup: [Symbols_panel, Color_switch],
-          swipe_up: Keyboard_number,
-          swipe_right: Symbols_panel,
-          label_symbol: "123",
-          hint: "符号",
-          width: 15,
+          click: Keyboard_number,
+          popup: [Symbols_panel, Color_switch, Theme_settings],
+          swipe_up: Symbols_panel,
+          label_symbol: "符号",
+          width: 14,
         }
-      - { click: ",", label: "，", ascii_label: ",", long_click: ".", swipe_up: ".", width: 15 }
-      - { click: space, long_click: Mode_switch, swipe_up: Mode_switch, width: 40, key_back_color: bc3, key_text_color: tc3, key_text_size: 27 }
-      - { click: "/", long_click: "?", swipe_up: "?", width: 15 }
+      - { click: ",", label: "，", ascii_label: ",", long_click: ".", swipe_up: ".", width: 17 }
+      - { click: space, long_click: Mode_switch, swipe_up: Mode_switch, width: 38, key_back_color: bc3, key_text_color: tc3, key_text_size: 27 }
+      - { click: "/", long_click: "?", swipe_up: "?", width: 17 }
       # Enter：点按回车；长按弹条「同文设置 / 系统设置 / 开发者选项」
       # 弹条按「离手指最近的排第一，其余往另一侧排」——Enter 在右边缘，所以是往左依次排，
       # 松手＝同文设置，左滑一点＝系统设置，再左滑＝开发者选项
@@ -931,7 +932,7 @@ preset_keyboards:
           popup: [Settings, SysSettings, DevSettings],
           swipe_up: Settings,
           label_symbol: "设置",
-          width: 15,
+          width: 14,
           key_back_color: bc4,
           key_text_color: tc4,
         }
@@ -991,13 +992,15 @@ preset_keyboards:
       - { click: Doc_End, label: 文末 }
       - { click: paste, label: 粘贴 }
 
-      - { click: cut, label: 剪切 }
+      # 复制：顶替原来的「剪切」
+      - { click: copy, label: 复制 }
       - { click: Left, label: "←", repeatable: true, long_click: Left1, swipe_up: Left1 }
       - { click: Shift_L2, label: 选择 }
       - { click: Right, label: "→", repeatable: true, long_click: Right1, swipe_up: Right1 }
       - { click: Delete, label: Delete, long_click: DeleteCandidate, swipe_up: DeleteCandidate }
 
-      - { click: copy, label: 复制 }
+      # Ctrl：单击挂起 Control（之后按 ←/→ 变 Ctrl+←/→ 跳词）
+      - { click: Ctrl_L2, label: "Ctrl" }
       - { click: Home, label: Home }
       - { click: Down, label: "↓", repeatable: true }
       - { click: End, label: End }
@@ -1005,8 +1008,17 @@ preset_keyboards:
 
       - { click: Keyboard_default, label: "返回", key_back_color: bc4, key_text_color: tc4 }
       - { click: undo, label: 撤销 }
-      # Ctrl：单击＝按一次 Ctrl（之后按 ←/→ 变 Ctrl+←/→ 跳词）；长按=空格；上滑=Tab
-      - { click: Ctrl_L2, label: "Ctrl", long_click: space, swipe_up: Tab, key_back_color: bc3, key_text_color: tc3 }
+      # 空格：点按＝空格；长按/上滑＝Tab；键面沿用 space 的长横，符号槽小字 Tab
+      # 用 space_c 而不是 space：space 带 repeatable/slide_cursor，键级长按和上滑会被吃掉
+      - {
+          click: space_c,
+          label: "————",
+          label_symbol: "Tab",
+          long_click: Tab,
+          swipe_up: Tab,
+          key_back_color: bc3,
+          key_text_color: tc3,
+        }
       - { click: redo, label: 重做 }
       - { click: Return, label: Enter, key_back_color: bc4, key_text_color: tc4 }
 
@@ -1087,6 +1099,12 @@ preset_keys:
   # 实现走 lua/commit_comment.lua（key_binder 的 send: commit_comment 实测无效）
   CtrlJ: { label: 注释, functional: false, send: Control+j }
   CtrlE: { label: 翻译, functional: false, send: Control+e }
+  # 应用快捷：command: run + 包名（同 MT_manager 写法）；下滑触发
+  AppObsidian: { label: Ob, functional: false, command: run, option: "md.obsidian/.MainActivity" }
+  AppQQ: { label: QQ, functional: false, command: run, option: "com.tencent.mobileqq/.activity.SplashActivity" }
+  AppWeChat: { label: 微信, functional: false, command: run, option: "com.tencent.mm/.ui.LauncherUI" }
+  AppDouyin: { label: 抖音, functional: false, command: run, option: "com.ss.android.ugc.aweme" }
+  SendS: { label: 保存, functional: false, send: Control+s }
   CtrlD: { label: 删段, functional: false, send: Control+d }
   CtrlN: { label: 新建, functional: false, send: Control+n }
   CtrlF: { label: 查找, functional: false, send: Control+f }
@@ -1169,6 +1187,9 @@ preset_keys:
       command: "liquid_keyboard",
       option: "剪贴",
     }
+  # 中英切换（底排专用）：中文态显示「中」，英文态显示「En」
+  Mode_switch_kb:
+    { toggle: ascii_mode, functional: false, send: SWITCH_CHARSET, states: [中, En] }
   # rime状态
   Mode_switch:
     {
@@ -1306,6 +1327,7 @@ preset_keys:
     { label: "⇨", send: Control+Right, repeatable: true, functional: false }
   Shift_L2: { label: 选择, preview: "⇪", functional: false, send: Shift_L }
   Ctrl_L2: { label: Ctrl, preview: "⌃", functional: false, send: Control_L }
+  Alt_L2: { label: Alt, preview: "⌥", functional: false, send: Alt_L }
 
   # 22自定义功能键
   Keyboard_defaulten:
