@@ -846,7 +846,7 @@ preset_keyboards:
       # Ctrl：借 A 左边那 5% 空隙放一个细 Ctrl，A 的位置完全不动；点按挂起 Control、再点取消
       - { width: 5 }
       - { click: a, long_click: select_all, swipe_up: select_all }
-      - { click: s, long_click: "+", swipe_up: "+", swipe_down: SendS, hint: "保存" }
+      - { click: s, long_click: "+", swipe_up: "+", swipe_down: CtrlS, hint: "保存" }
       - { click: d, long_click: "-", swipe_up: "-", swipe_down: AppDouyin, hint: "抖音" }
       # F：下滑＝用浏览器搜（必应）。取的是「光标前的内容」，不取选区（实测）
       - { click: f, long_click: CtrlF, swipe_up: CtrlF, swipe_down: Bing, hint: "必应" }
@@ -984,7 +984,6 @@ preset_keyboards:
     name: 光标控制
     width: 20
     height: 40
-    ascii_mode: 1
     keys:
       - { click: select_all, label: 全选 }
       - { click: Doc_Home, label: 文首 }
@@ -997,13 +996,13 @@ preset_keyboards:
       - { click: Left, label: "←", repeatable: true, long_click: Left1, swipe_up: Left1 }
       - { click: Shift_L2, label: 选择 }
       - { click: Right, label: "→", repeatable: true, long_click: Right1, swipe_up: Right1 }
-      - { click: Delete, label: Delete, long_click: DeleteCandidate, swipe_up: DeleteCandidate }
+      - { click: Delete_cn, long_click: DeleteCandidate, swipe_up: DeleteCandidate }
 
       # Ctrl：单击挂起 Control（之后按 ←/→ 变 Ctrl+←/→ 跳词）
       - { click: Ctrl_L2, label: "Ctrl" }
-      - { click: Home, label: Home }
+      - { click: Home_cn }
       - { click: Down, label: "↓", repeatable: true }
-      - { click: End, label: End }
+      - { click: End_cn }
       - { click: BackSpace2, label: "⌫", repeatable: true, long_click: CtrlBackspace, swipe_up: CtrlBackspace, key_back_color: bc2, key_text_color: tc2 }
 
       - { click: Keyboard_default, label: "返回", key_back_color: bc4, key_text_color: tc4 }
@@ -1011,8 +1010,7 @@ preset_keyboards:
       # 空格：点按＝空格；长按/上滑＝Tab；键面沿用 space 的长横，符号槽小字 Tab
       # 用 space_c 而不是 space：space 带 repeatable/slide_cursor，键级长按和上滑会被吃掉
       - {
-          click: space_c,
-          label: "————",
+          click: space_tab,
           label_symbol: "Tab",
           long_click: Tab,
           swipe_up: Tab,
@@ -1020,7 +1018,7 @@ preset_keyboards:
           key_text_color: tc3,
         }
       - { click: redo, label: 重做 }
-      - { click: Return, label: Enter, key_back_color: bc4, key_text_color: tc4 }
+      - { click: Return, key_back_color: bc4, key_text_color: tc4 }
 
 preset_keys:
   # 下滑 M 打开 MT 管理器（Trime 的 run 只吃「包名」或「包名/组件名」，不能带文件路径）
@@ -1077,12 +1075,23 @@ preset_keys:
       functional: false,
       send: space,
     }
+  # 光标区的空格：点按＝空格，键面是一条与字母区同风格的长横
+  space_tab:
+    {
+      label: "＿＿",
+      functional: false,
+      send: space,
+    }
   Clear: { label: 清空, send: Clear }
   Escape: { label: 取消, functional: false, send: Escape }
   Home: { label: Home, send: Home, functional: false }
   Insert: { label: 插入, send: Insert }
   Delete: { label: Delete, send: Delete, functional: false }
   End: { label: End, send: End, functional: false }
+  # 光标区用的中文标签版（内置同名键的英文 label 会盖掉键级 label，所以另起预设名）
+  Home_cn: { label: Home, functional: false, send: Home }
+  End_cn: { label: End, functional: false, send: End }
+  Delete_cn: { label: 删除, functional: false, send: Delete }
   Doc_Home: { label: 文首, send: Control+Home, functional: false }
   Doc_End: { label: 文末, send: Control+End, functional: false }
   Page_Up: { label: 上页, send: Page_Up, functional: false }
@@ -1104,7 +1113,7 @@ preset_keys:
   AppQQ: { label: QQ, functional: false, command: run, option: "com.tencent.mobileqq/.activity.SplashActivity" }
   AppWeChat: { label: 微信, functional: false, command: run, option: "com.tencent.mm/.ui.LauncherUI" }
   AppDouyin: { label: 抖音, functional: false, command: run, option: "com.ss.android.ugc.aweme" }
-  SendS: { label: 保存, functional: false, send: Control+s }
+  CtrlS: { label: 保存, functional: false, send: Control+s }
   CtrlD: { label: 删段, functional: false, send: Control+d }
   CtrlN: { label: 新建, functional: false, send: Control+n }
   CtrlF: { label: 查找, functional: false, send: Control+f }
