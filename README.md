@@ -197,21 +197,22 @@
 
 ## 七、改完怎么生效（Windows / 安卓）
 
-分两档：词表 txt 只要重启引擎，改 yaml / lua 才要重新部署——重建 `build/` 是慢的那一步。
+分两档：**词表 txt 与同文主题 `ms.trime.yaml`** 只要重启引擎；**方案 yaml、`symbols_caps_v.yaml`、`lua/`** 才要重新部署——重建 `build/` 是慢的那一步。
 
 | 改了什么 | 怎么生效 |
 | :-- | :-- |
 | 词表 txt：`custom_short.txt`、`custom_phrase.txt`、`custom_phrase_kf.txt` | 同文：工具栏 ⟳「同步」；小狼毫：重启算法服务 |
 | `custom_extend.txt` | 先跑脚本生成 `custom_extend.dict.yaml`，再走下面「重新部署」 |
-| 方案 yaml（`moqi.yaml` 等）、`symbols_caps_v.yaml`、`ms.trime.yaml`、`lua/` | 两端都要「重新部署」 |
+| 主题 `ms.trime.yaml` | 同文：⟳「同步」；小狼毫：重启算法服务 |
+| 其他 yaml：方案（`moqi.yaml` 等）、`symbols_caps_v.yaml`、`lua/` | 两端都要「重新部署」 |
 
-### 只改了词表 txt
+### 只改了词表 txt 或主题 yaml
 
-词表是运行时读的，不重建 `build/` 也能生效：
+这两类是运行时读的，不重建 `build/` 也能生效：
 
 | 平台 | 操作 |
 | :-- | :-- |
-| 安卓（同文） | 键盘工具栏的 ⟳（同步） |
+| 安卓（同文） | 键盘工具栏的 ⟳（同步）——词表和 `ms.trime.yaml` 都是改完按一下就行 |
 | Windows（小狼毫） | 重启算法服务（重开 `WeaselServer.exe`），**不用** `WeaselDeployer /deploy` |
 
 同文的「同步」会把外部存储 `/storage/emulated/0/rime` 的改动搬进同文实际读写的私有目录，
@@ -256,7 +257,7 @@ pause >nul
 
 - 被纯音码的重码折磨，愿意为**确定性**花一点手工成本；
 - 常用词里有大量系统词库收不到的专业词、人名、口语；
-- 想要"固定词频 + 简码 + 辅码"这套组合，但不接受学习型词频的不可控。
+- 想要"固定词频 + 简码 + 辅码"这套组合，不接受学习型词频的不可控。
 
 ---
 
