@@ -197,19 +197,29 @@
 
 ## 七、改完怎么生效（Windows / 安卓）
 
-### 按文件分
+分两档：词表 txt 只要重启引擎，改 yaml / lua 才要重新部署——重建 `build/` 是慢的那一步。
 
-| 改了 | 要不要跑脚本 | 之后怎么生效 |
-| :-- | :-- | :-- |
-| `custom_short.txt` | 不用 | 重新部署 |
-| `custom_extend.txt` | **要**（`Rime词库管理.py`） | 重新部署 |
-| `custom_phrase.txt` / `custom_phrase_kf.txt` | 不用 | 重新部署 |
-| `symbols_caps_v.yaml` / `ms.trime.yaml` | 不用 | 重新部署 |
-| `moqi.yaml` 等方案文件 | 不用 | 重新部署 |
+| 改了什么 | 怎么生效 |
+| :-- | :-- |
+| 词表 txt：`custom_short.txt`、`custom_phrase.txt`、`custom_phrase_kf.txt` | 同文：工具栏 ⟳「同步」；小狼毫：重启算法服务 |
+| `custom_extend.txt` | 先跑脚本生成 `custom_extend.dict.yaml`，再走下面「重新部署」 |
+| 方案 yaml（`moqi.yaml` 等）、`symbols_caps_v.yaml`、`ms.trime.yaml`、`lua/` | 两端都要「重新部署」 |
 
-### 跑脚本（只有 `custom_extend.txt` 需要）
+### 只改了词表 txt
 
-它要生成 `cn_dicts_common/custom_extend.dict.yaml`，否则改了不生效。
+词表是运行时读的，不重建 `build/` 也能生效：
+
+| 平台 | 操作 |
+| :-- | :-- |
+| 安卓（同文） | 键盘工具栏的 ⟳（同步） |
+| Windows（小狼毫） | 重启算法服务（重开 `WeaselServer.exe`），**不用** `WeaselDeployer /deploy` |
+
+同文的「同步」会把外部存储 `/storage/emulated/0/rime` 的改动搬进同文实际读写的私有目录，
+再合并 `sync/<设备id>/` 下的词库快照（词频、输入习惯），然后重启引擎——PC 经 Syncthing 同步过来的改动就是靠它。
+
+### `custom_extend.txt`：先跑脚本
+
+它要先生成 `cn_dicts_common/custom_extend.dict.yaml`，否则改了不生效。
 
 ```powershell
 cd $env:APPDATA\Rime
@@ -231,19 +241,16 @@ pause >nul
 
 脚本依赖 `pypinyin`（`pip install pypinyin`）。没装不会报错，而是把每个字本身当读音，生成的词典不可用；txt 不会被改坏，装上再跑一遍即可。
 
-### 重新部署
+生成出新的 `.dict.yaml` 属于「增改词库文件」，要重建 `build/`，所以跑完还得走下面的重新部署。
+
+### 重新部署（改了 yaml / lua 才用）
 
 | 平台 | 操作 |
 | :-- | :-- |
-| Windows（小狼毫） | 任务栏托盘图标右键 → **重新部署** |
-| 安卓（同文） | 键盘工具栏的 ⟳（同步），或同文设置页 → **重新部署** |
+| 安卓（同文） | 设置页 → **↺ 重新部署**（工具栏 ⟳ 不够，它不重建 `build/`） |
+| Windows（小狼毫） | `WeaselDeployer.exe /deploy`，等 `build\weasel.yaml` 的 mtime 变了再重启 `WeaselServer.exe` |
 
-两个入口的区别：
-
-- **同步（⟳）**：把外部存储 `/storage/emulated/0/rime` 的改动搬进同文实际读写的私有目录，再合并 `sync/<设备id>/` 下的词库快照（词频、输入习惯），然后重启引擎——PC 上经 Syncthing 同步过来的改动，必须走这一步才会被读到。
-- **重新部署**：让输入法把配置和词表重新编译一遍。
-
-日常改词表用哪个都行；从 PC 同步过来的改动**要用「同步」**。
+同文这边：`⋯ → 更新配置` 也是一次部署，但它**不搬文件**；只改了外部目录时它看不到，得先同步。
 
 ## 八、适合谁
 
@@ -280,32 +287,31 @@ pause >nul
 上游只有 `cangjie5.dict.yaml`，没有配套的 `cangjie5.schema.yaml`，缺了它编译不出仓颉词典。
 电脑端可能因为 `build/` 里有旧产物而看不出问题，手机重新部署后 `Zcj` 就直接打不出。本版把这个 schema 补回。
 
-### 3）五个可自定义文件
+### 3）建议自定义的位置
 
-| 文件 | 用途 | 改完 |
-| :-- | :-- | :-- |
-| `custom_phrase/custom_short.txt` | 用指定的 ASCII 编码打出指定的任意字符或词 | 重新部署 |
-| `custom_phrase/custom_extend.txt` | 加词与调词频，正常参与双拼、辅码、长句 | 跑脚本 + 重新部署 |
-| `custom_phrase/custom_phrase.txt` | 个人信息等固定条目，让二字词压过四简码 | 重新部署 |
-| `symbols_caps_v.yaml` | 斜杠引导的符号与个人信息，缓解 `custom_phrase.txt` 的重码压力 | 重新部署 |
-| `custom_phrase/custom_phrase_kf.txt` | `o` 引导的符号与表情，少移手指（权重 -1，排在系统词之后） | 重新部署 |
+| 文件                                   | 用途                                        |
+| :----------------------------------- | :---------------------------------------- |
+| `custom_phrase/custom_short.txt`     | 用指定的 ASCII 编码打出指定的任意字符或词                  |
+| `custom_phrase/custom_extend.txt`    | 加词与调词频，正常参与双拼、辅码、长句                       |
+| `custom_phrase/custom_phrase.txt`    | 个人信息等固定条目，让二字词压过四简码                       |
+| `symbols_caps_v.yaml`                | 斜杠引导的符号与个人信息，缓解 `custom_phrase.txt` 的重码压力 |
+| `custom_phrase/custom_phrase_kf.txt` | `o` 引导的符号与表情，少移手指（权重 -1，排在系统词之后）          |
 
 前三个文件的用法见前面几节；后两个是"引导型"的表，按 `码<Tab>内容` 往里加即可。
 
 ### 4）Lua 与其他功能
 
-| 文件 / 功能 | 作用 |
-| :-- | :-- |
-| `lua/aux_shift.lua` | 让同文支持 **▲ + 字母** 给第一个音节补辅码（Windows 端原本就有 Shift 辅码，安卓端靠它） |
-| `lua/commit_comment.lua` | Ctrl+J 把候选的注释直接上屏（反查结果上屏） |
-| `lua/charset_filter.lua` | 大小字集开关（工具栏/开关里的「小」字集过滤） |
-| `lua/moqi/jianma_show.lua` | 反查一二三简码、超级简拼和 `custom_short.txt`；改词表不用再手动动 `jian.dict.yaml` |
-| `lua/shift_enter.lua` | **▲ + Enter** 输出 `<br>`，在 Obsidian 表格里换行 |
-| `super4.dict.yaml` + `生成super4.py` | 四简码反查。原版四简码与 e 简码的反查有交叉，这里不用 e 简码、统一给四简码做反查；四简码条目太多，塞进 `jian.dict.yaml` 会拖慢，所以单独一张表。四简码词表改完用 `生成super4.py` 重新生成 |
-| 单引号三选 | 单引号键出「三选」候选 |
-| 逗号上屏超级简拼 | 逗号键可直接上屏超级简拼候选 |
-| 简词词频 | 在 `custom_short.txt` 里调简词之间的先后，不改原表权重 |
-| 关掉语言模型 | 词频固定，不会越用越漂 |
+| 文件 / 功能                            | 作用                                                                                                                                                 |
+| :--------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `lua/aux_shift.lua`                | 让同文支持 **▲ + 字母** 给第一个音节补辅码（Windows 端原本就有 Shift 辅码，安卓端靠它）                                                                                           |
+| `lua/commit_comment.lua`           | Ctrl+J 把候选的注释直接上屏（反查结果上屏）                                                                                                                          |
+| `lua/charset_filter.lua`           | 大小字集开关（工具栏/开关里的「小」字集过滤）                                                                                                                            |
+| `lua/moqi/jianma_show.lua`         | 反查一二三简码、超级简拼和 `custom_short.txt`；改词表不用再手动动 `jian.dict.yaml`                                                                                        |
+| `lua/shift_enter.lua`              | **▲ + Enter** 输出 `<br>`，在 Obsidian 表格里换行                                                                                                           |
+| `super4.dict.yaml` + `生成super4.py` | 四简码反查。原版四简码与 e 简码有交叉，反查也混乱，这里不用 e 简码、统一给四简码做反查；四简码条目太多，塞进 `jianma_show.lua` 会拖慢，所以单独一张表。一般建议直接加进 `custom_short.txt` 即可，若要修改可以使用 `生成super4.py` 重新生成 |
+| 单引号三选                              | 单引号键上屏候选第三                                                                                                                                         |
+| 逗号上屏超级简拼                           | 逗号键上屏超级简拼                                                                                                                                          |
+| 关掉语言模型                             | 实现完全固定的词频                                                                                                                                          |
 
 ### 5）同文手势（`ms.trime.yaml`）
 
