@@ -379,21 +379,46 @@ pause >nul
 这些在 `ms.trime.yaml` 的 `style.buttons` 列表里，顺序就是显示顺序（从右往左）。
 
 ### 7）Move 区（光标区）
-
-| 全选 | 文首 | ↑ | 文末 | 粘贴 |
-| :-: | :-: | :-: | :-: | :-: |
-| 复制 | ⇐<br>← | 选择 | ⇒<br>→ | 删词<br>删除 |
-| Ctrl | Home | ↓ | End | 删词<br>⌫ |
-| 返回 | 撤销 | Tab<br>␣ | 重做 | Enter |
+|  全选  |   文首   |    ↑     |   文末   |    粘贴    |
+| :--: | :----: | :------: | :----: | :------: |
+|  剪切  | ⇐<br>← |    选择    | ⇒<br>→ | 删词<br>删除 |
+|  复制  |  Home  |    ↓     |  End   | 删词<br>⌫  |
+| Ctrl |   撤销   | Tab<br>␣ |   重做   |  Enter   |
+|      |        |    返回    |        |          |
 
 - 选择：按住 Shift（`Shift_L2`）
 - ⇐ / ⇒：Ctrl+← / Ctrl+→ 跳词（`Left1` / `Right1`）
 - 删词：⌫ 是 Ctrl+Backspace（`CtrlBackspace`），删除键是 Ctrl+Delete（`DeleteCandidate`）
 - 重做：Ctrl+Shift+Z（`redo`）
 - 空格：点按出空格，长按/上滑出 Tab（`space_tab`）
+- 返回：底部**整行一个键**（`Keyboard_default`），点一下回到魔裁的字母键盘
 - 键面上的小字同样是长按/上滑提示，例如 `Tab` 在空格上方、`删词` 在删除键上方
 
-### 8）Enter 文案
+### 8）全键布局（`my.trime.yaml`）
+
+`ms.trime.yaml` 是日常用的「魔裁」。另有一份可选的「全键」主题，比魔裁只多**底部一排修饰键**：
+`Ctrl` / `Tab` / `Alt`，`33 / 34 / 33` 三等分，键高 16、比字母行矮一截。给需要组合键的场景用
+（比如 Obsidian 移动版的 `Alt+↑/↓` 移动行、`Ctrl+Z` 撤销）：
+
+| | 魔裁 `ms.trime.yaml` | 全键 `my.trime.yaml` |
+| :-- | :-- | :-- |
+| 主题名 | 魔裁 | 全键 |
+| 多一排 | 无 | 底部 `Ctrl` ｜ `Tab` ｜ `Alt` |
+| 行高 / `keyboard_height` | 40 / 230 | 32 / 290 |
+
+`my.trime.yaml` **不进仓库**（在 `.gitignore` 里），由附带的脚本从 `ms.trime.yaml` 现场生成：
+
+```bash
+python 生成my布局.py
+```
+
+脚本做四件事：主题名改成「全键」、补 `Tab_L` 预设、行高 40 → 32 并把 `keyboard_height` 230 → 290、
+在 default 键盘最下面追加修饰键那一排。**改布局请改脚本或 `ms.trime.yaml`，别直接改 `my.trime.yaml`**——
+下次生成会被覆盖。
+
+切换主题：键盘左上角 `⋯` →「键盘样式」→「主题」，选「全键」或「魔裁」。
+
+### 9）Enter 文案
 
 Enter 的标签由 `style.enter_labels` 决定，按 App 上报的输入动作取：
 
@@ -409,7 +434,7 @@ Enter 的标签由 `style.enter_labels` 决定，按 App 上报的输入动作�
 
 `enter_label_mode: 0`（只用自己的表）。有候选时 Enter 显示「确定」（`composing: Return1`）。
 
-### 9）鸣谢
+### 10）鸣谢
 
 - [墨奇音形](https://github.com/gaboolic/rime-shuangpin-fuzhuma) 作者 gaboolic —— 本配置全部基于它修改
 - [薄荷输入法](https://github.com/Mintimate/oh-my-rime) —— 小狼毫「蓝水鸭」皮肤
