@@ -22,12 +22,13 @@ ROOT = Path(__file__).resolve().parent
 SRC = ROOT / "ms.trime.yaml"
 DST = ROOT / "my.trime.yaml"
 
-# 底部修饰键那一排：33/34/33 占满整行，height 16 让它比字母行（32）矮一大截。
-# 行高是相对权重，压矮这一排，剩下的空间会自动分给上面几行，键盘总高（keyboard_height）不变。
+# 底部修饰键那一排：33/34/33 占满整行，height 17 让它比字母行（32）矮一大截。
+# 行高是相对权重：多出来这一排会把键盘撑高，所以 keyboard_height 要从 230 降到 263，
+# 这样字母行才和魔裁（ms）一样高（≈187px），修饰行保持 ≈100px。
 MOD_ROW = """      # ↓↓↓ 仅 my 版：底部一排修饰键（Ctrl / Tab / Alt），33/34/33 三等分、压矮（改 ms.trime.yaml 请勿改这里）
-      - { click: Ctrl_L2, label: "Ctrl", width: 33, height: 16 }
-      - { click: Tab_L, label: "Tab", width: 34, height: 16 }
-      - { click: Alt_L2, label: "Alt", width: 33, height: 16 }
+      - { click: Ctrl_L2, label: "Ctrl", width: 33, height: 23 }
+      - { click: Tab_L, label: "Tab", width: 34, height: 23 }
+      - { click: Alt_L2, label: "Alt", width: 33, height: 23 }
 """
 
 # default 键盘最后一排 Enter 键的收尾，用来定位「键盘最下面」
@@ -78,7 +79,7 @@ def main() -> None:
     # 4. 键盘整体高度要跟着加（锁定值 230 -> 290），否则多出来的一排会被切掉
     if "keyboard_height: 230" not in text:
         die("没找到 keyboard_height: 230")
-    text = text.replace("keyboard_height: 230", "keyboard_height: 290", 1)
+    text = text.replace("keyboard_height: 230", "keyboard_height: 272", 1)
 
     # 5. 在 default 键盘最后（Enter 键之后、下一个键盘之前）追加底部修饰键那一排
     if MOD_ROW_MARK in text:
@@ -101,7 +102,7 @@ def main() -> None:
     else:
         die(f"写不进 {DST.name}（文件被占用？）")
 
-    print(f"已生成 {DST.name}：{len(text.encode('utf-8'))} 字节，底部多一排 Ctrl/Tab/Alt（33/34/33，height 16）")
+    print(f"已生成 {DST.name}：{len(text.encode('utf-8'))} 字节，底部多一排 Ctrl/Tab/Alt（33/34/33，height 17）")
     print("在「键盘样式」里切到「全键」即可；日常仍用「魔裁」。")
 
 

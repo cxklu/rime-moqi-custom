@@ -260,14 +260,12 @@ pause >nul
 
 自造词用三位 `Zcy`：两位的 `Zc` 会把 `Zcj`（仓颉）吃掉。
 
-改的时候两处要一起动：`moqi.yaml` 里各翻译器的 `prefix:`，以及 `recognizer.patterns` 对应的正则。
-
 ### 2）补回 `cangjie5.schema.yaml`
 
 上游只有 `cangjie5.dict.yaml`，没有配套的 `cangjie5.schema.yaml`，缺了它编译不出仓颉词典。
 电脑端可能因为 `build/` 里有旧产物而看不出问题，手机重新部署后 `Zcj` 就直接打不出。本版把这个 schema 补回。
 
-### 3）建议自定义的位置
+### 3）推荐自定义的位置
 
 | 文件                                   | 用途                                        |
 | :----------------------------------- | :---------------------------------------- |
@@ -312,20 +310,20 @@ pause >nul
 
 **A–L**
 
-| 键 | 手势 | 动作 | 预设 |
-| :-- | :-- | :-- | :-- |
-| A | 长按/上滑 | 全选 | `select_all` |
-| S | 下滑 | 保存（Ctrl+S） | `CtrlS`（`send: Control+s`） |
-| D | 下滑 | 打开抖音 | `AppDouyin` |
-| F | 长按/上滑 | 查找（Ctrl+F） | `CtrlF` |
-| F | 下滑 | 用必应搜索光标前的内容 | `Bing`（`option` 里 `%4$s` 是光标前文本） |
-| H | 长按/上滑 | 替换（Ctrl+H） | `CtrlH` |
-| H | 左滑 | 收起/展开符号小字 | `HideSymbols` |
-| H | 下滑 | 收起/展开注解小字 | `HideHints` |
-| J | 长按/上滑 | 成对括号（中文态 `（）`、英文态 `()`），光标居中 | ASCII 字面量 `(){Left}` |
-| J | 下滑 | 上屏反查（Ctrl+J） | `CtrlJ` |
-| L | 长按/上滑 | 分号 `;` | — |
-| L | 下滑 | 拆字（Ctrl+L） | `CtrlL` |
+| 键   | 手势    | 动作                           | 预设                               |
+| :-- | :---- | :--------------------------- | :------------------------------- |
+| A   | 长按/上滑 | 全选                           | `select_all`                     |
+| S   | 下滑    | 保存（Ctrl+S）                   | `CtrlS`（`send: Control+s`）       |
+| D   | 下滑    | 打开抖音                         | `AppDouyin`                      |
+| F   | 长按/上滑 | 查找（Ctrl+F）                   | `CtrlF`                          |
+| F   | 下滑    | 用必应搜索光标前的内容                  | `Bing`（`option` 里 `%4$s` 是光标前文本） |
+| H   | 长按/上滑 | 替换（Ctrl+H）                   | `CtrlH`                          |
+| H   | 左滑    | 收起/展开符号小字                    | `HideSymbols`                    |
+| H   | 下滑    | 收起/展开注解小字                    | `HideHints`                      |
+| J   | 长按/上滑 | 成对括号（中文态 `（）`、英文态 `()`），光标居中 | ASCII 字面量 `(){Left}`             |
+| J   | 下滑    | 上屏反查（Ctrl+J）                 | `CtrlJ`                          |
+| L   | 长按/上滑 | 分号 `;`，可上屏次选                 | —                                |
+| L   | 下滑    | 拆字（Ctrl+L）                   | `CtrlL`                          |
 
 **Z–M**
 
@@ -361,7 +359,7 @@ pause >nul
 | 123 | 符号（`Symbols_panel`）→ 换皮肤（`Color_switch`）→ 主题（`Theme_settings`） |
 | Enter | 同文设置（`Settings`）→ 系统设置（`SysSettings`）→ 开发者选项（`DevSettings`） |
 
-> 弹条是"离手指最近的那项排第一，其余往另一侧排"：Enter 在右边缘，所以往左依次是系统设置、开发者选项。
+> 弹条是"离手指最近的那项排第一，其余往另一侧排"：Enter 在右边缘，所以往左依次是系统设置、开发者选项
 
 ### 6）工具栏按钮
 
@@ -423,8 +421,27 @@ Enter 的标签由 `style.enter_labels` 决定，按 App 上报的输入动作�
 
 `enter_label_mode: 0`（只用自己的表）。有候选时 Enter 显示「确定」（`composing: Return1`）。
 
-### 10）鸣谢
+### 10）一些同文小技巧
 
+**滑动空格就是方向键。** 空格左右滑（`slide_cursor`）发出去的就是 ← / →，
+所以在全键上先锁修饰键再滑，等于把方向键搬到了主键盘，不用进 Move 区：
+
+| 手势 | 等价于 |
+| :-- | :-- |
+| 锁 `Ctrl` + 空格左右滑 | `Ctrl+←` / `Ctrl+→`，编辑器里按词跳 |
+| 锁 `Shift` + 空格左右滑 | 选中文字（再叠 `Ctrl` 就是按词选） |
+| 锁 `Ctrl` + `Alt` + 空格左右滑 | `Ctrl+Alt+←` / `Ctrl+Alt+→` |
+
+**哪些组合键能发。** 带修饰位的同文都能发，`Ctrl` / `Shift` / `Alt` / `Win` 都行，只有两个要注意：
+
+| 修饰键 | 限制 |
+| :-- | :-- |
+| `Shift` | 中文态下，只有「带 Shift + 对象是字母或可上档符号」同时成立时才失效；方向键没有上档操作，不受影响 |
+| `Win` | 可能要先切英文态 |
+
+**`Shift` + 空格**（▲ + 空格）在手机上很好按，适合给 Obsidian 这类跨平台应用设一个高频快捷键。
+
+## 十、鸣谢
 - [墨奇音形](https://github.com/gaboolic/rime-shuangpin-fuzhuma) 作者 gaboolic —— 本配置全部基于它修改
 - [薄荷输入法](https://github.com/Mintimate/oh-my-rime) —— 小狼毫「蓝水鸭」皮肤
 - [魔裁 ms-trime](https://github.com/lost-42/ms-trime) —— 安卓端布局

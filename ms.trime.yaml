@@ -848,7 +848,7 @@ preset_keyboards:
       - { width: 5 }
       - { click: a, long_click: select_all, swipe_up: select_all }
       - { click: s, long_click: "+", swipe_up: "+", swipe_down: CtrlS, hint: "保存" }
-      - { click: d, long_click: "-", swipe_up: "-", swipe_down: AppDouyin, hint: "抖音" }
+      - { click: d, long_click: "-", swipe_up: "-", swipe_left: CtrlD, swipe_down: AppDouyin, hint: "抖音" }
       # F：下滑＝用浏览器搜（必应）。取的是「光标前的内容」，不取选区（实测）
       - { click: f, long_click: CtrlF, swipe_up: CtrlF, swipe_down: Bing, hint: "必应" }
       - { click: g, long_click: "|", swipe_up: "|" }
@@ -877,7 +877,6 @@ preset_keyboards:
       - click: k
         long_click: '""{Left}'
         swipe_up: '""{Left}'
-        swipe_down: CtrlL
 
       # L：长按/上滑=分号；下滑=Ctrl+L（整字拆分，Obsidian 里切换待办状态）
       - { click: l, long_click: ";", swipe_up: ";", swipe_down: CtrlL, hint: "拆字" }
