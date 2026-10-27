@@ -1,7 +1,7 @@
 
-基于 [墨奇音形](https://github.com/gaboolic/rime-shuangpin-fuzhuma)（作者 gaboolic）
+基于 [墨奇音形](https://github.com/gaboolic/rime-shuangpin-fuzhuma)（作者 gaboolic）的个人配置
 
-原版功能很全：固定词频、大量简拼、长句直接补辅码。这一版在原版基础上补的是**选词控制**：
+在原版基础上主要补的是**选词控制**：
 让"哪个词占哪个码、谁排前面"由你写死，而不是由算法猜
 
 新增的两张词表：
@@ -33,7 +33,6 @@
 重码兜底再借原版已有的 `custom_phrase.txt`（最高一档）
 
 ## 二、能力与代价
-
 **能力：想用什么码打出，就用什么码打出；想让谁排前面，谁就排前面**
 
 - 加词、改码、调频都是写一行 txt，不用动方案
@@ -76,6 +75,8 @@
 
 `vhrm` + 空格 → 「中华人民」；`vhrm` + `；`（次选）→「中华人民共和国」。全码打出 `vs hx rf mb` 可反查 `vhrm`
 
+> **大写开头的码只能用空格选第一条**（`Ds`、`DT`、`Z*` 这些），数字键 / `；` / `'` 都选不中，原因和绕法见「九 · 11）」。
+
 ### `custom_extend.txt`：能加词、能调频，代价是会影响长句
 
 - 一行一条，字段用 **Tab** 分隔：
@@ -109,7 +110,6 @@
 同样的词放进 `custom_short.txt` 就不用动它们：那里天然低一档，只要在这个文件里调相对顺序。
 
 ## 四、三个真实场景，看清边界
-
 ### 1）简码抢了全码的位置
 ```
 本科学历	bkxl        ← 在 custom_short.txt 里（三、四简码）
@@ -143,7 +143,6 @@
 **结论：能不影响长句的表达优先放 `custom_short.txt`；真要影响排序，才放 `custom_extend.txt`。**
 
 ## 五、学习成本：不需要一次掌握
-
 它不是"先背一套码才能打字"的方案，而是想加就加、越用越顺：
 
 | 阶段      | 你会做的事                            | 不会的时候                   |
@@ -167,7 +166,6 @@
 |  5  | 简码/快符/字根等让位表               | `-1`                   |
 
 两条实用规则：
-
 - **跨词库抢第一靠"换档"，不是把权重写大。** 同一个码在两个文件里都有时，上面那档赢。
 - **同一档内部，才靠自己那一列的权重。** 写 `假期<Tab>500001` 就比同文件默认的 `500000` 靠前。
 
@@ -175,7 +173,6 @@
 > 不是简单比大小。这张表只给"照着做就对"的结论。
 
 ## 七、改完怎么生效（Windows / 安卓）
-
 分两档：**词表 txt 与同文主题 `ms.trime.yaml`** 只要重启引擎；**方案 yaml、`symbols_caps_v.yaml`、`lua/`** 才要重新部署——重建 `build/` 是慢的那一步。
 
 | 改了什么                                                                 | 怎么生效                                     |
@@ -206,7 +203,7 @@ cd $env:APPDATA\Rime
 python Rime词库管理.py
 ```
 
-不想开终端就建个 bat 放桌面双击（**把 python 路径换成自己的**）：
+可以建一个 bat 放桌面双击（**把 python 路径换成自己的**）：
 
 ```bat
 @echo off
@@ -233,18 +230,14 @@ pause >nul
 同文这边：`⋯ → 更新配置` 也是一次部署，但它**不搬文件**；只改了外部目录时它看不到，得先同步。
 
 ## 八、适合谁
-
 - 被纯音码的重码折磨，愿意为**确定性**花一点手工成本；
 - 常用词里有大量系统词库收不到的专业词、人名、口语；
 - 想要"固定词频 + 简码 + 辅码"这套组合，不接受学习型词频的不可控。
 
----
-
 ## 九、其他改动
-
 ### 1）引导前缀：`a*` → `Z*`
 
-原版用 `a` 开头的组合做引导，会和小写简码抢位置；这一版统一改成大写 `Z`，小写全部留给双拼和简拼。
+原版用 `a` 开头的组合做引导，这一版统一改成大写 `Z`，避免影响简拼
 
 | 功能 | 原版 | 本版 |
 | :-- | :-- | :-- |
@@ -258,7 +251,7 @@ pause >nul
 | 日语 | `aj` | `Zj` |
 | 自造词 | `ac` | `Zcy` |
 
-自造词用三位 `Zcy`：两位的 `Zc` 会把 `Zcj`（仓颉）吃掉。
+自造词用三位 `Zcy`：两位的 `Zc` 会把 `Zcj`（仓颉）吃掉
 
 ### 2）补回 `cangjie5.schema.yaml`
 
@@ -273,40 +266,45 @@ pause >nul
 | `custom_phrase/custom_extend.txt`    | 加词与调词频，正常参与双拼、辅码、长句                       |
 | `custom_phrase/custom_phrase.txt`    | 个人信息等固定条目，让二字词压过四简码                       |
 | `symbols_caps_v.yaml`                | 斜杠引导的符号与个人信息，缓解 `custom_phrase.txt` 的重码压力 |
-| `custom_phrase/custom_phrase_kf.txt` | `o` 引导的符号与表情，少移手指（权重 -1，排在系统词之后）          |
+| `custom_phrase/custom_phrase_kf.txt` | `o` 引导的符号与表情，减少手指位移                       |
 
-前三个文件的用法见前面几节；后两个是"引导型"的表，按 `码<Tab>内容` 往里加即可。
+前三个文件的用法见前面几节；后两个是"引导型"的表，按 `码<Tab>内容` 往里加即可
 
 ### 4）Lua 与其他功能
 
 | 文件 / 功能                            | 作用                                                                                                                                                 |
 | :--------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `lua/aux_shift.lua`                | 让同文支持 **▲ + 字母** 给第一个音节补辅码（Windows 端原本就有 Shift 辅码，安卓端靠它）                                                                                           |
+| `lua/aux_shift.lua`                | 让同文支持 **▲ + 字母** 给第一个音节补辅码（原本会先合成大写字母）                                                                                                             |
 | `lua/commit_comment.lua`           | Ctrl+J 把候选的注释直接上屏（反查结果上屏）                                                                                                                          |
 | `lua/charset_filter.lua`           | 大小字集开关（工具栏/开关里的「小」字集过滤）                                                                                                                            |
 | `lua/moqi/jianma_show.lua`         | 反查一二三简码、超级简拼和 `custom_short.txt`；改词表不用再手动动 `jian.dict.yaml`                                                                                        |
-| `lua/shift_enter.lua`              | **▲ + Enter** 输出 `<br>`，在 Obsidian 表格里换行                                                                                                           |
+| `lua/shift_enter.lua`              | 同文 **▲ + Enter** 输出 `<br>`，在 Obsidian 表格里换行                                                                                                        |
 | `super4.dict.yaml` + `生成super4.py` | 四简码反查。原版四简码与 e 简码有交叉，反查也混乱，这里不用 e 简码、统一给四简码做反查；四简码条目太多，塞进 `jianma_show.lua` 会拖慢，所以单独一张表。一般建议直接加进 `custom_short.txt` 即可，若要修改可以使用 `生成super4.py` 重新生成 |
 | 单引号三选                              | 单引号键上屏候选第三                                                                                                                                         |
 | 逗号上屏超级简拼                           | 逗号键上屏超级简拼                                                                                                                                          |
 | 关掉语言模型                             | 实现完全固定的词频                                                                                                                                          |
+日期时间别名
+- date 别名 `Da`
+- time 别名 `Uj`
+- datetime 别名 `DT`
+- week 别名 `Wk`
+- timestamp 别名 `Ts`
+- `Dt` 不带秒的 datetime
 
 ### 5）同文手势（`ms.trime.yaml`）
-
-键面上那两行小字就是触发提示：**上面一行是长按/上滑**（`label_symbol`），**下面一行是注解**（`hint`）。
-下表括号里是实际预设名，在 `ms.trime.yaml` 里搜得到。
+键面上那两行小字就是触发提示：**上面一行是符号小字**（`label_symbol`），**下面一行是注解小字**（`hint`）。
 
 **Q–P：下滑**
 
-| 键 | 动作 | 预设 |
-| :-- | :-- | :-- |
-| Q | 打开 QQ | `AppQQ`（`command: run`） |
-| W | 打开微信 | `AppWeChat` |
-| E | Ctrl+E 翻译 | `CtrlE`（`send: Control+e`） |
-| R | 重复上屏刚打出的内容 | `RepeatCommit`（`command: commit`） |
-| T | 插入当前日期时间（不含秒） | `Timestamp`（`command: date`） |
-| O | 打开 Obsidian | `AppObsidian` |
-| P | Ctrl+P 墨奇拆字 | `CtrlP`（`send: Control+p`） |
+| 键   | 动作            | 预设                                |
+| :-- | :------------ | :-------------------------------- |
+| Q   | 打开 QQ         | `AppQQ`（`command: run`）           |
+| W   | 打开微信          | `AppWeChat`                       |
+| E   | Ctrl+E 翻译     | `CtrlE`（`send: Control+e`）        |
+| R   | 重复上屏刚打出的内容    | `RepeatCommit`（`command: commit`） |
+| T   | 插入当前日期时间（不含秒） | `Timestamp`（`command: date`）      |
+| O   | 打开 Obsidian   | `AppObsidian`                     |
+| P   | Ctrl+P 首末拆分   | `CtrlP`（`send: Control+p`）        |
 
 **A–L**
 
@@ -315,27 +313,28 @@ pause >nul
 | A   | 长按/上滑 | 全选                           | `select_all`                     |
 | S   | 下滑    | 保存（Ctrl+S）                   | `CtrlS`（`send: Control+s`）       |
 | D   | 下滑    | 打开抖音                         | `AppDouyin`                      |
+| D   | 左滑    | Ctrl+D                       | `CtrlD`                          |
 | F   | 长按/上滑 | 查找（Ctrl+F）                   | `CtrlF`                          |
 | F   | 下滑    | 用必应搜索光标前的内容                  | `Bing`（`option` 里 `%4$s` 是光标前文本） |
-| H   | 长按/上滑 | 替换（Ctrl+H）                   | `CtrlH`                          |
 | H   | 左滑    | 收起/展开符号小字                    | `HideSymbols`                    |
 | H   | 下滑    | 收起/展开注解小字                    | `HideHints`                      |
 | J   | 长按/上滑 | 成对括号（中文态 `（）`、英文态 `()`），光标居中 | ASCII 字面量 `(){Left}`             |
 | J   | 下滑    | 上屏反查（Ctrl+J）                 | `CtrlJ`                          |
 | L   | 长按/上滑 | 分号 `;`，可上屏次选                 | —                                |
-| L   | 下滑    | 拆字（Ctrl+L）                   | `CtrlL`                          |
+| L   | 下滑    | 墨奇拆字（Ctrl+L）                 | `CtrlL`                          |
 
 **Z–M**
 
-| 键 | 手势 | 动作 | 预设 |
-| :-- | :-- | :-- | :-- |
-| X | 长按/上滑 | 剪切 | `cut` |
-| C | 长按/上滑 | 复制 | `copy` |
-| V | 长按/上滑 | 同文剪贴板直贴（不依赖 App） | `paste_clip` |
-| V | 下滑 | 系统剪贴板粘贴（等同 Ctrl+V） | `paste` |
-| B | 下滑 | 加粗（Ctrl+B） | `CtrlB` |
-| N | 下滑 | 新建（Ctrl+N） | `CtrlN` |
-| M | 下滑 | 打开 MT 管理器 | `MT_manager`（`command: run`，`option: bin.mt.plus`） |
+| 键   | 手势    | 动作                 | 预设                                                 |
+| :-- | :---- | :----------------- | :------------------------------------------------- |
+| X   | 长按/上滑 | 剪切                 | `cut`                                              |
+| C   | 长按/上滑 | 复制                 | `copy`                                             |
+| V   | 长按/上滑 | 同文剪贴板直贴（不依赖 App）   | `paste_clip`                                       |
+| V   | 下滑    | 系统剪贴板粘贴（等同 Ctrl+V） | `paste`                                            |
+| B   | 下滑    | 加粗（Ctrl+B）         | `CtrlB`                                            |
+| N   | 下滑    | 新建（Ctrl+N）         | `CtrlN`                                            |
+| M   | 长按/上滑 | 单引号 `'`，可上屏候选第三    | —                                                  |
+| M   | 下滑    | 打开 MT 管理器          | `MT_manager`（`command: run`，`option: bin.mt.plus`） |
 
 **其他**
 
@@ -361,20 +360,34 @@ pause >nul
 
 > 弹条是"离手指最近的那项排第一，其余往另一侧排"：Enter 在右边缘，所以往左依次是系统设置、开发者选项
 
+**长按逗号 → 系统的「输入法」页**
+
+直接跳转：预设 `IMESettings` 的 `option` 写死成
+`com.android.settings/.Settings$InputMethodAndLanguageSettingsActivity`。
+
+> ⚠️ 组件名是按 OriginOS 写的，别的 ROM 上通常不一样；而不存在时同文不会安静地失败——
+> 它会抛 `ActivityNotFoundException`，直接弹「应用程序崩溃了」的崩溃日志页。换机器前先查自己的：
+>
+> ```
+> adb shell cmd package resolve-activity -a android.settings.INPUT_METHOD_SETTINGS
+> ```
+>
+> 把输出里的 `name=` 和 `packageName=` 拼成 `包名/组件名` 填回 `option` 就行。
+>
+> 同一个坑的另一半：**应用没装也会这样崩**。Q、W、O、D 那几下是 `command: run` 拉起对应 App，没装就一样抛这个异常。装 App 或改掉即可
+
 ### 6）工具栏按钮
+工具行从左到右：
 
-工具行右侧按钮，从右往左：
-
-| 按钮 | 图标 | 动作 |
-| :-- | :-- | :-- |
-| 收起 | `ic@keyboard_hide` 一类 | 收起键盘 |
-| 表情 | `emoji_button` | 打开表情/符号面板 |
-| 剪贴板 | `clipboard_button`（`ic@clipboard`） | 打开同文剪贴板 |
-| 光标 | `move_button`（`ic@cursor_text`） | 切到 Move 区（光标键盘，`Keyboard_move`） |
-| 中/En | `ascii_mode_button`（显示「中」/「En」） | 切换中英文（`Mode_switch`） |
-| 同步 | `sync_button`（`ic@refresh`） | 搬外部存储改动 + 合并词库快照 + 重启引擎（`Sync`） |
-
-这些在 `ms.trime.yaml` 的 `style.buttons` 列表里，顺序就是显示顺序（从右往左）。
+| 按钮   | 图标                                 | 动作                                                         |
+| :--- | :--------------------------------- | :--------------------------------------------------------- |
+| ⋯ 菜单 | `ic@dots_horizontal`               | 打开菜单（键盘样式 / 方案 / 更新配置 / 虚拟键盘…），固定在最左，配置项是 `primary_button` |
+| 同步   | `ic@refresh`（`sync_button`）        | 搬外部存储改动 + 合并词库快照 + 重启引擎（`Sync`）                            |
+| 中/En | `ascii_mode_button`                | 切换中英文（`Mode_switch`），按状态显示「中」/「En」                         |
+| 光标   | `ic@cursor_text`（`move_button`）    | 切到 Move 区（`Keyboard_move`）                                 |
+| 剪贴板  | `ic@clipboard`（`clipboard_button`） | 打开同文剪贴板                                                    |
+| 表情   | `ic@emoticon`（`emoji_button`）      | 打开表情/符号面板                                                  |
+| 收起   | `ic@keyboard_close`（`hide_button`） | 收起键盘                                                       |
 
 ### 7）Move 区（光标区）
 |  全选  |   文首   |    ↑     |   文末   |    粘贴    |
@@ -382,7 +395,7 @@ pause >nul
 |  剪切  | ⇐<br>← |    选择    | ⇒<br>→ | 删词<br>删除 |
 |  复制  |  Home  |    ↓     |  End   | 删词<br>⌫  |
 | Ctrl |   撤销   | Tab<br>␣ |   重做   |  Enter   |
-| 返回（整行） |  |  |  |  |
+|      |        |    返回    |        |          |
 
 - 选择：按住 Shift（`Shift_L2`）
 - ⇐ / ⇒：Ctrl+← / Ctrl+→ 跳词（`Left1` / `Right1`）
@@ -390,20 +403,23 @@ pause >nul
 - 重做：Ctrl+Shift+Z（`redo`）
 - 空格：点按出空格，长按/上滑出 Tab（`space_tab`）
 - 返回：底部**整行一个键**（`Keyboard_default`），点一下回到魔裁的字母键盘
-- 键面上的小字同样是长按/上滑提示，例如 `Tab` 在空格上方、`删词` 在删除键上方
 
 ### 8）全键布局（`my.trime.yaml`）
 
-仓库里有两份主题：`ms.trime.yaml`（魔裁）是日常用的那份，`my.trime.yaml`（全键）在它基础上多一排修饰键
-（`Ctrl` / `Tab` / `Alt`），需要组合键时切过去用。
+仓库里有两份主题：`ms.trime.yaml`（魔裁），`my.trime.yaml`（全键）在它基础上多一排修饰键（`Ctrl` / `Tab` / `Alt`），需要组合键时可以切过去用
 
 `my.trime.yaml` 由 `生成my布局.py` 从 `ms.trime.yaml` 生成：
-
 ```bash
 python 生成my布局.py
 ```
 
-要动全键的布局，改脚本（或 `ms.trime.yaml`）后重跑即可，别直接改 `my.trime.yaml`——下次生成会覆盖。
+要动全键的布局，改脚本（或 `ms.trime.yaml`）后重跑即可，别直接改 `my.trime.yaml`——下次生成会覆盖
+
+![魔裁（左，不忽略手势边衬区）与全键（右，忽略手势边衬区）](img/keyboard_height.png)
+
+魔裁不忽略（左）全键忽略（右）
+同文设置 → 高级 → 忽略系统手势边衬区，开启则会忽略掉与系统按钮的间隔使按键贴底
+借此可实现两种主题保持字母坐标不变，让全键在底部多出一排修饰键。但不同设备 DPI 不同，推荐根据自己的设备进行调整
 
 ### 9）Enter 文案
 
@@ -422,24 +438,41 @@ Enter 的标签由 `style.enter_labels` 决定，按 App 上报的输入动作�
 `enter_label_mode: 0`（只用自己的表）。有候选时 Enter 显示「确定」（`composing: Return1`）。
 
 ### 10）一些同文小技巧
-
-**滑动空格就是方向键。** 空格左右滑（`slide_cursor`）发出去的就是 ← / →，
+空格左右滑（`slide_cursor`）发出去的就是 ← / →，
 所以在全键上先锁修饰键再滑，等于把方向键搬到了主键盘，不用进 Move 区：
 
-| 手势 | 等价于 |
-| :-- | :-- |
-| 锁 `Ctrl` + 空格左右滑 | `Ctrl+←` / `Ctrl+→`，编辑器里按词跳 |
-| 锁 `Shift` + 空格左右滑 | 选中文字（再叠 `Ctrl` 就是按词选） |
+| 手势                       | 等价于                         |
+| :----------------------- | :-------------------------- |
+| 锁 `Ctrl` + 空格左右滑         | `Ctrl+←` / `Ctrl+→`，编辑器里按词跳 |
+| 锁 `Shift` + 空格左右滑        | 选中文字（再叠 `Ctrl` 就是按词选）       |
 | 锁 `Ctrl` + `Alt` + 空格左右滑 | `Ctrl+Alt+←` / `Ctrl+Alt+→` |
 
-**哪些组合键能发。** 带修饰位的同文都能发，`Ctrl` / `Shift` / `Alt` / `Win` 都行，只有两个要注意：
+带修饰位的同文都能发，`Ctrl` / `Shift` / `Alt` / `Win` 都行，只有两个要注意：
 
-| 修饰键 | 限制 |
-| :-- | :-- |
-| `Shift` | 中文态下，只有「带 Shift + 对象是字母或可上档符号」同时成立时才失效；方向键没有上档操作，不受影响 |
-| `Win` | 可能要先切英文态 |
+| 修饰键     | 限制                                                         |
+| :------ | :--------------------------------------------------------- |
+| `Shift` | 中文态下，只有「带 Shift + 字母或可上档符号」同时成立时才失效，切英文态可用；方向键没有上档操作所以不受影响 |
+| `Win`   | 可能要先切英文态                                                   |
 
-**`Shift` + 空格**（▲ + 空格）在手机上很好按，适合给 Obsidian 这类跨平台应用设一个高频快捷键。
+**`Shift` + 空格**（▲ + 空格）在手机上很好按，适合给 Obsidian 这类跨平台应用设一个高频快捷键
+
+### 11）大写开头的码：数字、分号、单引号都选不中
+`custom_short.txt` 里大写开头的短码用着很舒服：码短、跟正常打字不重码、不用记大小写也不会拼错
+（`Ds` → DeepSeek / DeepSeek Harness）。
+
+但候选只能用**空格**上屏。输入还停在「大写字母」状态时，上排数字键、`；`（次选）、`'`（三选）全部失效——
+按下去只是把那个字符打进去。原因是大写字母还得能跟数字组合（`N` 日期、`R` 大写金额这类功能靠它），
+输入法分不清你是要选第 2 个候选，还是要打一个 2。
+
+`Z*` 引导、日期时间别名（`Da` / `Uj` / `DT` / `Wk` / `Ts` / `Dt`）都是大写开头，同样只能空格上屏。
+
+三种应付办法：
+
+| 情况 | 办法 |
+| :- | :- |
+| 想要的排在第二、第三 | 再给它加一码顶到第一（例如 `Dsh` → `DeepSeek Harness`），空格上屏 |
+| 加不了码（`Z*` 引导、日期别名） | 先用 ↓ 把选中项挪到它，再空格 |
+| 第一位就是想要的 | 直接空格 |
 
 ## 十、鸣谢
 - [墨奇音形](https://github.com/gaboolic/rime-shuangpin-fuzhuma) 作者 gaboolic —— 本配置全部基于它修改

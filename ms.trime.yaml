@@ -38,7 +38,7 @@ style:
   latin_font: latin.ttf #西文本体
   latin_locale: en_US #西文语言
   locale: zh_CN #缺省语言 zh_TW,zh_CN,zh_HK,""
-  keyboard_height: 230 #锁定键盘高度，避免切换时键盘高度变化而造成闪烁
+  keyboard_height: 220 #锁定键盘高度，避免切换时键盘高度变化而造成闪烁
   keyboard_height_land: 200 #锁定横屏下键盘高度，避免切换时键盘高度变化而造成闪烁
   key_symbol_offset_x: -5
   key_symbol_offset_y: 3
@@ -854,7 +854,7 @@ preset_keyboards:
       - { click: g, long_click: "|", swipe_up: "|" }
       # H：左滑＝收起/展开「符号」小字，下滑＝收起/展开「注解」小字（各是开关，再触发恢复）
       #    一个键只能跑一个 command，没有"同时藏两个"的命令，所以拆成两个方向
-      - { click: h, long_click: CtrlH, swipe_up: CtrlH, hint: "隐藏", swipe_left: HideSymbols, swipe_down: HideHints }
+      - { click: h, long_click: ":", swipe_up: ":", hint: "隐藏", swipe_left: HideSymbols, swipe_down: HideHints }
       # J：长按/上滑=成对括号、光标居中（跟随中英文：中文态 （）、英文态 ()）；
       #    下滑=反查（把当前候选注释上屏，与小狼毫物理 Ctrl+J 同效），注解“反查”
       #    写法同 K：ASCII 字面量交给 Rime punctuator 做状态转换；
@@ -891,9 +891,9 @@ preset_keyboards:
       # V：长按/上滑=同文剪贴板直贴（不依赖 App 支持 Ctrl+V）；下滑=Ctrl+V（走 App/系统剪贴板）
       - { click: v, long_click: paste_clip, swipe_up: paste_clip, swipe_down: paste, hint: "CtrlV" }
       # B：长按/上滑=冒号；下滑=Ctrl+B（Obsidian/Markdown 加粗），注解“加粗”
-      - { click: b, long_click: ":", swipe_up: ":", swipe_down: CtrlB, hint: "加粗" }
-      - { click: n, long_click: "\\", swipe_up: "\\", swipe_down: CtrlN, hint: "新建" }
-      - { click: m, long_click: "_", swipe_up: "_", swipe_down: MT_manager, hint: "MT" }
+      - { click: b, long_click: "\\", swipe_up: "\\", swipe_down: CtrlB, hint: "加粗" }
+      - { click: n, long_click: "_", swipe_up: "_", swipe_down: CtrlN, hint: "新建" }
+      - { click: m, long_click: "'", swipe_up: "'", swipe_down: MT_manager, hint: "MT" }
       # 退格：上滑=Esc（符号槽写 Esc）、下滑=撤销（注解槽写 撤销）
       # 退格：上滑=Esc、下滑=撤销、长按=持续删（BackSpace2 预设键自带的 repeatable + slide_delete）
       # 注：这里不要再挂 popup —— 弹条会和「长按连删」抢手势，结果是长按没反应
@@ -919,7 +919,7 @@ preset_keyboards:
           label_symbol: "符号",
           width: 14,
         }
-      - { click: ",", label: "，", ascii_label: ",", long_click: ".", swipe_up: ".", width: 17 }
+      - { click: ",", label: "，", ascii_label: ",", long_click: IMESettings, swipe_up: ".", width: 17 }
       - { click: space, long_click: Mode_switch, swipe_up: Mode_switch, width: 38, key_back_color: bc3, key_text_color: tc3, key_text_size: 27 }
       - { click: "/", long_click: "?", swipe_up: "?", width: 17 }
       # Enter：点按回车；长按弹条「同文设置 / 系统设置 / 开发者选项」
@@ -1287,6 +1287,17 @@ preset_keys:
       send: function,
       command: run,
       option: "com.android.settings/.Settings$DevelopmentSettingsActivity",
+    }
+  # 输入法设置（系统管理与升级 → 输入法）
+  #   cmd package resolve-activity -a android.settings.INPUT_METHOD_SETTINGS
+  #   → com.android.settings/.Settings$InputMethodAndLanguageSettingsActivity
+  # 两台的「输入法」页同一个组件；换 ROM 失效就重跑上面那条命令
+  IMESettings:
+    {
+      label: ".",
+      send: function,
+      command: run,
+      option: "com.android.settings/.Settings$InputMethodAndLanguageSettingsActivity",
     }
   # 收起/展开全键盘的小字（两个槽分开控制，各是开关）
   HideSymbols:
