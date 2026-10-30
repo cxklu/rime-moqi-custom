@@ -128,7 +128,20 @@ V我50看看实力	vwwu
 系	xi	2
 怒	nu	2
 
+## 补不常用字读音，让位四简码，辅码反查在 custom_phrase/custom_fuzhu.txt
 嗲	dx
 嗲	dxk
 嗲	dxkx
 嗲	dxkx/
+扽	df	1
+扽	dff	1
+扽	dfft
+扽	dfft/
+扥	df
+扥	dff
+扥	dffb
+扥	dffb/
+忒	tw
+忒	twy
+忒	twyx
+忒	twyx/

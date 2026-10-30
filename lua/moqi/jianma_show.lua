@@ -58,6 +58,11 @@ local HINT_FILES = {
 -- 自定义短码：非单字词全部保留（查全），排在简码表后面
 local SHORT_FILE = "custom_phrase/custom_short.txt"
 
+-- 单字辅码兜底：词库里删掉某个读音后，那个字就再没有带「音节;辅码;…」的词条，
+-- 打简码出来时注释里看不到辅码。这张表按「字 -> 辅码」补回来，
+-- 只在候选是单字、且注释为空时使用（词库自带的辅码优先）。
+local FUZHU_FILE = "custom_phrase/custom_fuzhu.txt"
+
 ----------------------------------------------------------------------
 -- 基础工具
 ----------------------------------------------------------------------
@@ -224,12 +229,21 @@ end
 -- 四字词 4 码由 C++ 的 reverse_lookup_filter@fourjian 先写进注释
 -- （见 moqi.yaml），而那个码可能同时也在 custom_short.txt 里。
 -- 全部码都已存在时返回 nil，表示不用改注释。
+-- 注释里已有哪些码：按「整段」比较，不能拿子串比
+-- （否则一码 "d" 会被另一段四码 "dbvd" 吞掉）
+local function code_set(comment)
+   local set = {}
+   for c in comment:gmatch("%S+") do set[c] = true end
+   return set
+end
+
 local function make_hint(codes, comment, sep)
    if not codes or codes == "" then return nil end
    if not comment or comment == "" then return codes end
+   local have = code_set(comment)
    local add = nil
    for c in codes:gmatch("%S+") do
-      if not comment:find(c, 1, true) then
+      if not have[c] then
          add = add and (add .. sep .. c) or c
       end
    end
@@ -266,19 +280,30 @@ function M.init(env)
    env.hint = {}
    env.super_count = load_super(dirs, env.super)
 
+   -- 单字辅码兜底表
+   env.fuzhu = {}
+   local fz = 0
+   each_entry(FUZHU_FILE, dirs, function(word, code)
+      if ulen(word) == 1 and env.fuzhu[word] == nil then
+         env.fuzhu[word] = code
+         fz = fz + 1
+      end
+   end)
+
    -- 把「码 -> 词」表挂到 Lua 全局，给链尾的 super_tail 复用（同一个 Lua 状态，
    -- 不重复加载这 1.5 万条，省内存也省 init 时间）
    rawset(_G, "moqi_super", env.super)
    env.hint_count = load_hint(dirs, env.hint,
                               env.settings.min_word_length, env.settings.max_hint)
 
-   log.info(string.format("[jianma_show] 超级简拼 %d 条 / 简码反查 %d 词",
-                          env.super_count, env.hint_count))
+   log.info(string.format("[jianma_show] 超级简拼 %d 条 / 简码反查 %d 词 / 单字辅码 %d 条",
+                          env.super_count, env.hint_count, fz))
 end
 
 function M.fini(env)
    env.super = nil
    env.hint = nil
+   env.fuzhu = nil
 end
 
 ----------------------------------------------------------------------
@@ -289,6 +314,7 @@ function M.func(input, env)
    local settings = env.settings
    local super = env.super
    local hint_tbl = env.hint
+   local fuzhu = env.fuzhu
    local sep = settings.hint_separator
    local min_code = settings.min_code_length
    local long_enough = true
@@ -325,6 +351,11 @@ function M.func(input, env)
       -- B. 简码反查
       if not hint and long_enough then
          hint = make_hint(hint_tbl[text], comment, sep)
+         -- 单字、且词库没给注释时，用辅码兜底表补上
+         if not hint and fuzhu and (comment == nil or comment == "")
+            and ulen(text) == 1 then
+            hint = fuzhu[text]
+         end
       end
 
       -- 只有真要改注释时才取 genuine（每次都要过一次 C++ 边界）

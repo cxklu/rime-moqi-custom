@@ -122,27 +122,23 @@
 - 不能用 Shift 加辅码
 - 不参与长句
 
-这是简码的代价，——想要可移动、可补辅码，就用 `custom_extend.txt`
+这是简码的代价——想要可移动、可补辅码，就用 `custom_extend.txt`
 
-### 5）删掉的两个读音
+### 5）调整不常用的读音避免影响四简码
 
-`yai`（崖、厓、睚、啀、嘊、崕、娾 这一族的另一种读音）和 `dia`（嗲）都是**单音节**——双拼只占两个字母（`yd`、`dx`）。
-一个字挂上它，就会把 `ydky`（一定可以）这类四简码压在下面。
+`yai`（厓、崖、睚、啀 这一族的另一种读音）、`dia`（嗲）、`den`（扽、扥）、`tei`（忒）这类读音都是**单音节**，
+双拼只占两个字母（`yd`、`dx`…）。一个字挂上它，就会把 `ydky`（一定可以）这类四简码压在下面；
+原版四简码本来就不少，还得再往 `custom_short.txt` 里抄一遍把它们提前。
 
-原版本来四简码就不少，只是权重偏低，还得再往 `custom_short.txt` 里抄一遍把它们提前；`yd`、`dx` 更糟，
-会被带「厓」「嗲」的那几个冷门词盖住。**对几乎用不上、或只对应一两个生僻字的读音，删掉改用自定义编码更划算**：
-不用再往 `custom_short.txt` 里加一遍，删掉的字和带它的词也照样能打。
+**对几乎用不上、或只对应一两个生僻字的读音，直接删掉更划算**：删完那个四简码自己就是第一，
+不用再去 `custom_short.txt` 提权重。比如删掉 `yai` 之后，「一定可以」这类不再被「厓」族压着；
+再比如 `tei` 一删，`tw` 下的「吞云吐雾」就从「囤忒」后面升到第一。
 
-所以删掉了单字的 `yai`（啀 嘊 娾 崕 崖 睚 厓）和 `dia`（嗲）；**带这些音的词保留**（`发嗲`、`嗲嗲兔` 之类照样能打）。
-`崖`、`睚` 仍有 `ya` 读音，`啀`、`嘊`、`娾` 仍有 `ai`，用起来没差别。
+删掉的单字读音：`yai`（厓 啀 嘊 娾 崕 崖 睚 厓）、`dia`（嗲）、`den`（扽 扥）、`tei`（忒）。
+**带这些音的词仍然可以打**（`发嗲`、`忒大`、`也忒`）；这些字也都还有别的读音：
+`厓`、`崖`、`睚` 有 `ya`，`啀`、`嘊`、`娾` 有 `ai`，`扽` 有 `dun`，`扥` 有 `dun`/`tuo`，`忒` 有 `te`/`tui`。
 
-`嗲` 在自定义编码里补上，既能正常打出，又不占四简码的位：
-```
-嗲	dx
-嗲	dxk
-嗲	dxkx
-嗲	dxkx/
-```
+删掉读音的字还可用自定义编码打，加进 `custom_short.txt`；补辅码提示再往 `custom_phrase/custom_fuzhu.txt` 里写一行 `字<Tab>辅码`。
 
 ## 四、改完怎么生效（Windows / 安卓）
 
@@ -201,6 +197,7 @@ python Rime词库管理.py
 | `custom_phrase/custom_short.txt`     | 用指定的 ASCII 编码打出指定的任意字符或词                  |
 | `custom_phrase/custom_extend.txt`    | 加词与调词频，正常参与双拼、辅码、长句                       |
 | `custom_phrase/custom_phrase.txt`    | 个人信息等固定条目，让二字词压过四简码                       |
+| `custom_phrase/custom_fuzhu.txt`     | 可选。单字辅码兜底：给删掉读音的字留提示                     |
 | `symbols_caps_v.yaml`                | 斜杠引导的符号与个人信息，缓解 `custom_phrase.txt` 的重码压力 |
 | `custom_phrase/custom_phrase_kf.txt` | `o` 引导的符号与表情，减少手指位移                       |
 
@@ -213,7 +210,7 @@ python Rime词库管理.py
 | `lua/aux_shift.lua`                | 让同文支持 **▲ + 字母** 给第一个音节补辅码（原本会先合成大写字母）                                                                                                             |
 | `lua/commit_comment.lua`           | Ctrl+J 把候选的注释直接上屏（反查结果上屏）                                                                                                                          |
 | `lua/charset_filter.lua`           | 大小字集开关（工具栏/开关里的「小」字集过滤）                                                                                                                            |
-| `lua/moqi/jianma_show.lua`         | 反查一二三简码、超级简拼和 `custom_short.txt`；改词表不用再手动动 `jian.dict.yaml`                                                                                        |
+| `lua/moqi/jianma_show.lua`         | 反查一二三简码、超级简拼和 `custom_short.txt`；改词表不用再手动动 `jian.dict.yaml`；单字缺辅码时读 `custom_fuzhu.txt`                                                                |
 | `lua/shift_enter.lua`              | 同文 **▲ + Enter** 输出 `<br>`，在 Obsidian 表格里换行                                                                                                        |
 | `super4.dict.yaml` + `生成super4.py` | 四简码反查。原版四简码与 e 简码有交叉，反查也混乱，这里不用 e 简码、统一给四简码做反查；四简码条目太多，塞进 `jianma_show.lua` 会拖慢，所以单独一张表。一般建议直接加进 `custom_short.txt` 即可，若要修改可以使用 `生成super4.py` 重新生成 |
 | 单引号三选                              | 单引号键上屏候选第三                                                                                                                                         |
