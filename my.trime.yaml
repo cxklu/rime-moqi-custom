@@ -1013,7 +1013,8 @@ preset_keyboards:
 
       # Ctrl：单击挂起 Control（之后按 ←/→ 变 Ctrl+←/→ 跳词）
       - { click: Ctrl_L2, label: "Ctrl" }
-      - { click: undo, label: 撤销 }
+      # 2026-11-01：撤销换成 Alt（挂起 Alt_L，之后按字母/数字就是 Alt+ 组合）
+      - { click: Alt_L2, label: "Alt" }
       # 空格：点按＝空格；长按/上滑＝Tab；键面沿用 space 的长横，符号槽小字 Tab
       # 用 space_c 而不是 space：space 带 repeatable/slide_cursor，键级长按和上滑会被吃掉
       - {

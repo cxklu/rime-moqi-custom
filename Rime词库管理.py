@@ -2,7 +2,7 @@
 Rime词库管理.py
 
 管理自定义扩展词库：
-  custom_extend — 自定义扩展词（词 或 词\t权重），自动生成小鹤辅码
+  custom_extend — 自定义扩展词（词 / 词\t档位 / 词\t码\t档位），自动生成小鹤辅码
 
 使用方法：
   1. 编辑 custom_phrase/custom_extend.txt
@@ -56,7 +56,14 @@ EXTEND_DST = f"{RIME}/cn_dicts_common/custom_extend.dict.yaml"
 MORAN_CHARS = f"{RIME}/program/moran.chars.dict.yaml"
 FLYPYDZ = f"{RIME}/program/flypydz.yaml"
 
-EXTEND_DEFAULT_WEIGHT = 500000
+# ---- extend 词频 ----
+# librime 读表时先把词频 /1e8，再加该翻译器的 initial_quality（本方案 10000），
+# 得到候选质量。custom_short 是 5 万档、custom_phrase 是 10 万档，
+# 所以 extend 要落在两档之间，词频就得是 5e12 这个量级。
+EXTEND_BASE_WEIGHT = 5_000_000_000_000  # 不写档位时写入的词频 → 质量 60000
+# txt 里第三列写的是「再往前挪几档」：1 档 = +1e7 词频 = +0.1 质量。
+# 不直接 +1，是因为词频在表里按 float32 的 log 值存，5e12 上加 1 会被舍入抹平。
+EXTEND_WEIGHT_STEP = 10_000_000
 HEADER_MARKS = {"---", "...", "name:", "version:", "sort:", "use_"}
 
 # ============================================================
@@ -158,9 +165,10 @@ def get_pinyin_list(word: str) -> list[str]:
     return [item[0] for item in pinyin(word, style=PyStyle.NORMAL)]
 
 
-def build_extend_entry(word: str, weight: int,
+def build_extend_entry(word: str, level: int,
                        fuzhu_lookup: dict[str, str],
                        raw_codes: str | None = None) -> str:
+    weight = EXTEND_BASE_WEIGHT + level * EXTEND_WEIGHT_STEP
     if raw_codes:
         return f"{word}\t{raw_codes}\t{weight}"
 
@@ -196,22 +204,24 @@ def sync_extend() -> int:
         if len(parts) >= 3:
             word, codes, weight_str = parts[0], parts[1], parts[2]
             try:
-                weight = int(weight_str)
+                level = int(weight_str)
             except ValueError:
-                weight = EXTEND_DEFAULT_WEIGHT
-            entries.append(build_extend_entry(word, weight, fuzhu_lookup, raw_codes=codes))
+                level = 0
+            entries.append(build_extend_entry(word, level, fuzhu_lookup, raw_codes=codes))
 
         elif len(parts) == 2:
-            word, weight_str = parts[0], parts[1]
+            word, second = parts[0], parts[1]
             try:
-                weight = int(weight_str)
+                level = int(second)
+                entries.append(build_extend_entry(word, level, fuzhu_lookup))
             except ValueError:
-                weight = EXTEND_DEFAULT_WEIGHT
-            entries.append(build_extend_entry(word, weight, fuzhu_lookup))
+                # 第二列不是数字 → 当作显式读音（省掉档位时的常见写法）
+                entries.append(build_extend_entry(word, 0, fuzhu_lookup,
+                                                  raw_codes=second))
 
         elif len(parts) == 1:
             word = parts[0]
-            entries.append(build_extend_entry(word, EXTEND_DEFAULT_WEIGHT, fuzhu_lookup))
+            entries.append(build_extend_entry(word, 0, fuzhu_lookup))
 
     if not entries:
         print("⚠️  custom_extend.txt 中没有有效词条，已跳过。")
