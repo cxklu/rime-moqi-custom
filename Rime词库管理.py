@@ -232,6 +232,43 @@ def sync_extend() -> int:
     return len(entries)
 
 
+
+# ============================================================
+# 小字集方案 — 与主方案共用全部配置，只换成不含扩展区字表的词典
+# ============================================================
+
+VARIANT_SRC = f"{RIME}/moqi_wan.extended.dict.yaml"
+VARIANT_DST = f"{RIME}/moqi_wan.extended_small.dict.yaml"
+VARIANT_SKIP = "cn_dicts/GB18030-2022"
+
+
+def sync_variant_dict() -> int:
+    """由主词典派生小字集词典：去掉 GB18030 扩展区字表，别的原样保留。
+
+    GB18030-2022 里有 1.5 万个「虚拟读音 ziang」的生僻字，它们都是 zl 的候选；
+    小字集要逐个筛掉它们才能凑满一页，所以打字时反而卡。派生一份不含这张表的
+    词典给「小字集」方案用，主方案继续做大字集。
+    """
+    raw = read_file(VARIANT_SRC)
+    if raw is None:
+        print(f"❌ 未找到主词典：{VARIANT_SRC}")
+        return 0
+
+    out, dropped = [], False
+    for line in raw.splitlines():
+        if VARIANT_SKIP in line and line.lstrip().startswith("- "):
+            dropped = True
+            continue
+        if line.strip() == "name: moqi_wan.extended":
+            line = "name: moqi_wan.extended_small"
+        out.append(line)
+
+    if not dropped:
+        print(f"⚠️  主词典里没找到 {VARIANT_SKIP}，小字集会和主方案完全一样")
+    write_file(VARIANT_DST, "\n".join(out) + "\n")
+    return sum(1 for l in out if l.lstrip().startswith("- cn_dicts"))
+
+
 # ============================================================
 # 主入口
 # ============================================================
@@ -245,6 +282,11 @@ def main():
     n_extend = sync_extend()
     if n_extend > 0:
         print(f"  ✅ 已同步 {n_extend} 条 → {EXTEND_DST}")
+
+    print("\n--- 小字集词典（去掉 GB18030 扩展区）---")
+    n_imports = sync_variant_dict()
+    if n_imports:
+        print(f"  ✅ 已同步 {n_imports} 张字/词表 → {VARIANT_DST}")
 
     print(f"\n{'=' * 40}")
     print(f"  共同步 {n_extend} 条词库，请重新部署 Rime 生效")

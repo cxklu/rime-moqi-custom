@@ -1,0 +1,22 @@
+# Rime schema
+# encoding: utf-8
+# 小字集方案：与 moqi_wan_flypymo.schema.yaml 共用全部配置，只把词典换成
+# 不含 GB18030 扩展区字表的派生词典（少 1.5 万个「虚拟读音 ziang」的生僻字，
+# 候选更快）。主方案改了配置这里自动跟着变，不用维护两份。
+__include: moqi_wan_flypymo.schema.yaml:/
+
+schema:
+  schema_id: moqi_wan_flypymo_small
+  name: 墨奇+小鹤双拼·小字集
+  version: "2026-11-05"
+  description: |
+    墨奇辅助码 小鹤双拼版，日常用的精简词库（不含 GB18030 扩展区生僻字）
+    要打扩展区生僻字时，切换到「墨奇+小鹤双拼·墨奇」
+
+__patch:
+  translator/dictionary: moqi_wan.extended_small
+  translator/prism: moqi_wan_flypymo_small
+  add_user_dict/dictionary: moqi_wan.extended_small
+  add_user_dict/prism: moqi_wan_flypymo_small
+  user_dict_set/dictionary: moqi_wan.extended_small
+  user_dict_set/prism: moqi_wan_flypymo_small

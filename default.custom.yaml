@@ -1,0 +1,8 @@
+# Rime default custom
+# encoding: utf-8
+
+patch:
+  schema_list:
+    - schema: moqi_wan_flypymo_small   # 墨奇·小鹤+墨奇形（小字集，日常用，候选快）
+    - schema: moqi_wan_flypymo         # 墨奇·小鹤+墨奇形（大字集，含 GB18030 扩展区生僻字）
+    - schema: moqi_single_xh           # 墨奇码·顶屏版·小鹤双拼
