@@ -153,6 +153,10 @@ V我50看看实力	vwwu
 歘	ixh
 歘	ixhq
 歘	ixhq/
+黁	ny
+黁	nyg
+黁	nygo
+黁	nygo/
 俩	lx
 俩	lxr
 俩	lxrl
@@ -165,3 +169,7 @@ V我50看看实力	vwwu
 挼	rxf
 挼	rxfn
 挼	rxfn/
+甮	fs
+甮	fsw
+甮	fswy
+甮	fswy/

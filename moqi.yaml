@@ -249,7 +249,7 @@ reverse:
     tag: reverse_moqima
     dictionary: reverse_moqima
     enable_completion: true
-    prefix: "Zmq"
+    prefix: "Zm"
     suffix: "'"
     tips: 〔墨奇反查〕
     preedit_format:
@@ -376,7 +376,7 @@ guide:
       uppercase: "^[A-Z].*$"
       punct: '^/([0-9]|10|[A-z]+)$'
       ## 拆字、笔画、仓颉: 
-      reverse_moqima: "^Zmq[A-Za-z]*$" # 大写 Z 引导，不占小写简码
+      reverse_moqima: "^Zm[A-Za-z]*$" # 大写 Z 引导，不占小写简码
       radical_flypy: "^Zz[a-z]*$" # 大写 Zz 引导（组字），不占小写简码
       reverse_stroke: "^Zb[A-Za-z]*$" # 大写 Zb 引导（笔画）
       reverse_cj: "^Zcj[A-Za-z]*$" # 大写 Zcj 引导（仓颉）
