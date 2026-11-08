@@ -62,7 +62,23 @@ local function contains_extended(text)
   return false
 end
 
+
+-- 反查（墨奇 Zm、两分 Zz、笔画 Zb、仓颉 Zcj、自然两分 Zlf）是「查字」用途，
+-- 用户要看的正是生僻字和它的读音/辅码，小字集把这些候选滤掉的话反查就没意义了，
+-- 所以这类输入一律不过滤。
+local function is_reverse_input(text)
+  return text:match("^Zm") or text:match("^Zz") or text:match("^Zb")
+      or text:match("^Zcj") or text:match("^Zlf")
+end
+
 function M.func(input, env)
+  local raw = env.engine.context.input
+  if raw and is_reverse_input(raw) then
+    for cand in input:iter() do
+      yield(cand)
+    end
+    return
+  end
   -- 打开 extended_charset = 大字集：不过滤，原样放行
   if env.engine.context:get_option("extended_charset") then
     for cand in input:iter() do

@@ -35,6 +35,8 @@ switches_engine:
       - lua_processor@*aux_shift
       # Shift+Enter（同文 ▲+Enter）在 Obsidian 表格里插入 <br> 换行
       - lua_processor@*shift_enter
+      # ; / ' 次选、三选：R/U/C/N/V 的合成数字键会被 recognizer 吃掉，这里直接选候选
+      - lua_processor@*alt_select
       - key_binder
       - speller
       - punctuator
@@ -130,6 +132,8 @@ switches_engine:
       # 超级简拼就跟着一起没了（hyl = 行业里 曾经完全不出候选就是这原因）。
       # 这里看到的首个候选才是真正会显示的那个；一个都没有时自己造一个 ⚡ 候选。
       - lua_filter@*super_tail
+      # 大写 Z 候选：最近上屏的文字（lua/recent_commits.lua）
+      - lua_filter@*recent_commits
       - uniquifier
 
 # grammar:                                 # 禁用语言模型（固定词频模式下不需要上下文预测）
@@ -373,7 +377,7 @@ guide:
   recognizer:
     # import_preset: default
     patterns:
-      uppercase: "^[A-Z].*$"
+      uppercase: "^[A-Z][A-Za-z]*$"  # 单独的 Z 给 recent_commits（数字不并入输入端，便于选候选）
       punct: '^/([0-9]|10|[A-z]+)$'
       ## 拆字、笔画、仓颉: 
       reverse_moqima: "^Zm[A-Za-z]*$" # 大写 Z 引导，不占小写简码
@@ -391,6 +395,7 @@ guide:
       unicode: "^U[a-f0-9]+"              # 脚本将自动获取第 2 个字符 U 作为触发前缀，响应 lua_translator@unicode，输出 Unicode 字符
       number: "^R[0-9]+[.]?[0-9]*"        # 脚本将自动获取第 2 个字符 R 作为触发前缀，响应 lua_translator@number_translator，数字金额大写
       gregorian_to_lunar: "^N[0-9]{1,8}"  # 脚本将自动获取第 2 个字符 N 作为触发前缀，响应 lua_translator@lunar，公历转农历，输入 N20240115 得到「二〇二三年腊月初五」
+      calculator: "^V[^;']*$"          # 大写 V 计算器：算式里的数字/符号/字母函数并进输入端，不吞 ; 和 '（留给次选/三选）
 
   emojis:
     tag: emojis
