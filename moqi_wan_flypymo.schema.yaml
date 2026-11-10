@@ -173,3 +173,18 @@ custom_short:
   enable_sentence: false
   enable_completion: false
   initial_quality: 50000
+
+# ── Lua 功能的配置 ─────────────────────────────────────────────────────────
+# 注意：这些键必须写在 schema 里才会进 env.engine.schema.config；
+#       写在 moqi.yaml 顶层只是文档，lua 里 get_string/get_int 读不到。
+
+# Ctrl+J：顺序上屏当前页的候选（lua/commit_current.lua）
+commit_current:
+  limit: 6                 # 一次上屏几条
+
+# 大写 Z：最近上屏（lua/recent_commits.lua）
+recent_commits:
+  log_dir: custom_phrase   # 日志目录（相对输入法配置目录；安卓是共享目录 /storage/emulated/0/rime）
+  device: ""               # 留空 = 按平台分（recent_commits_windows.log / recent_commits_android.log）
+                           #        填名字（如 pc / phone）= 一设备一份（recent_commits_pc.log）
+  log_max_kb: 512          # 单个日志超过这个大小就截掉前一半

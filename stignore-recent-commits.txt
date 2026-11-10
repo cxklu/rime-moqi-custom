@@ -1,0 +1,2 @@
+// 上屏日志：Windows 一份、安卓一份，随 Syncthing 同步（必须在 *.log 规则之前）
+!/custom_phrase/recent_commits_*.log

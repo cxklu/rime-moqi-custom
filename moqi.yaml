@@ -27,7 +27,7 @@ switches_engine:
       - ascii_composer
       - recognizer
       - lua_processor@*sbxlm.key_binder # 绑定按键
-      # 注释上屏：把当前选中候选的注释直接打出去（I 下滑 → Control+j）
+      # 注释上屏：把当前选中候选的注释直接打出去（J 下滑 → Control+i）
       # 排在 key_binder 前面，避免被它抢走；两端（Trime/小狼毫）都走这一处
       - lua_processor@*commit_comment
       # Shift+字母 给第一个音加辅码：同文把 Shift+字母合成成大写字符，
@@ -37,6 +37,8 @@ switches_engine:
       - lua_processor@*shift_enter
       # ; / ' 次选、三选：R/U/C/N/V 的合成数字键会被 recognizer 吃掉，这里直接选候选
       - lua_processor@*alt_select
+      # Ctrl+J：上屏当前候选（任何候选都行，排在 key_binder 前才抢得到）
+      - lua_processor@*commit_current
       - key_binder
       - speller
       - punctuator
@@ -484,3 +486,4 @@ big_char_and_user_dict:
       - "xform/(^|[ '])[^[]+[[]/$1/" ## 编码提示只显示辅助码部分
     prefix: "Zcy"
     tips: "〔自造词〕"
+

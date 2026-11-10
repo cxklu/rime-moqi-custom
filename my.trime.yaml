@@ -840,7 +840,7 @@ preset_keyboards:
       - { click: t, long_click: 5, swipe_up: "5", swipe_down: Timestamp, hint: "时间" }
       - { click: y, long_click: 6, swipe_up: "6" }
       - { click: u, long_click: 7, swipe_up: "7" }
-      - { click: i, long_click: 8, swipe_up: "8" }
+      - { click: i, long_click: 8, swipe_up: "8", swipe_down: CtrlI, hint: "反查" }
       - { click: o, long_click: 9, swipe_up: "9", swipe_down: AppObsidian, hint: "Ob" }
       - { click: p, long_click: 0, swipe_up: "0", swipe_down: CtrlP, hint: "拆字" }
 
@@ -856,14 +856,14 @@ preset_keyboards:
       #    一个键只能跑一个 command，没有"同时藏两个"的命令，所以拆成两个方向
       - { click: h, long_click: ":", swipe_up: ":", hint: "隐藏", swipe_left: HideSymbols, swipe_down: HideHints }
       # J：长按/上滑=成对括号、光标居中（跟随中英文：中文态 （）、英文态 ()）；
-      #    下滑=反查（把当前候选注释上屏，与小狼毫物理 Ctrl+J 同效），注解“反查”
+      #    下滑=上屏（把当前这一页的候选一次打出去，见 lua/commit_current.lua），注解“上屏”
       #    写法同 K：ASCII 字面量交给 Rime punctuator 做状态转换；
       #    label_symbol 固定写 （），因为键面符号槽不随状态变（hint/label_symbol 同理）
       - click: j
         long_click: '(){Left}'
         swipe_up: '(){Left}'
         swipe_down: CtrlJ
-        hint: "反查"
+        hint: "上屏"
         label_symbol: "（）"
       # K：长按/上滑=成对的双引号（光标居中，跟随中英文：中文态 “” 、英文态 ""）
       #    实测（2026-10-15，同文 3.3.11）：ascii 子块是**单个动作 token**（KeyActionToken），
@@ -1009,7 +1009,7 @@ preset_keyboards:
       - { click: Home_cn }
       - { click: Down, label: "↓", repeatable: true }
       - { click: End_cn }
-      - { click: BackSpace2, label: "⌫", repeatable: true, long_click: CtrlBackspace, swipe_up: CtrlBackspace, key_back_color: bc2, key_text_color: tc2 }
+      - { click: BackSpace2, label: "⌫", repeatable: true, long_click: CtrlBackspace, swipe_up: CtrlBackspace, swipe_down: CtrlZ, hint: "撤销", key_back_color: bc2, key_text_color: tc2 }
 
       # Ctrl：单击挂起 Control（之后按 ←/→ 变 Ctrl+←/→ 跳词）
       - { click: Ctrl_L2, label: "Ctrl" }
@@ -1122,10 +1122,14 @@ preset_keys:
   select_all: { label: 全选, functional: false, send: Control+a }
   CtrlP: { label: 拆字, functional: false, send: Control+p }
   CtrlL: { label: 拆字, functional: false, send: Control+l }
-  # I 下滑：把当前候选的「注释」直接上屏
+  # I 下滑：把当前候选的「注释」直接上屏（键面注解「反查」）
   # 例：a → 候选「啊」→ 下滑 P 拆字成注释「kk 口可」→ 下滑 I 把这串注释打出去
   # 实现走 lua/commit_comment.lua（key_binder 的 send: commit_comment 实测无效）
-  CtrlJ: { label: 注释, functional: false, send: Control+j }
+  CtrlI: { label: 反查, functional: false, send: Control+i }
+  # J 下滑：把当前这一页的候选一次上屏，一条一行（见 lua/commit_current.lua，条数配 commit_current/limit）
+  CtrlJ: { label: 上屏, functional: false, send: Control+j }
+  # Move 区 ⌫ 下滑：撤销（Ctrl+Z）
+  CtrlZ: { label: 撤销, functional: false, send: Control+z }
   CtrlE: { label: 翻译, functional: false, send: Control+e }
   # 应用快捷：command: run + 包名（同 MT_manager 写法）；下滑触发
   AppObsidian: { label: Ob, functional: false, command: run, option: "md.obsidian/.MainActivity" }

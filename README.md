@@ -90,7 +90,7 @@
 | 其他 yaml：方案（`moqi.yaml` 等）、`symbols_caps_v.yaml`、`lua/`               | 两端都要「重新部署」                               |
 
 词表 txt 是运行时读的，不重建 `build/`：安卓按一下键盘工具栏的 ⟳（同步），Windows 重启算法服务即可。
-同文的「同步」会把 `/storage/emulated/0/rime` 的改动搬进私有目录，再合并 `sync/<设备id>/` 下的词库快照，然后重启引擎——PC 经 Syncthing 同步过来的改动就是靠它。
+同文的「同步」会把 `/storage/emulated/0/rime` 的改动搬进私有目录，再合并 `sync/<设备id>/` 下的词库快照，然后重启引擎。
 
 `custom_extend.txt` 要先生成词典：
 ```powershell
@@ -207,11 +207,12 @@ pause >nul
 | 文件 / 功能                            | 作用                                                                                                                                                 |
 | :--------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `lua/aux_shift.lua`                | 让同文支持 **▲ + 字母** 给第一个音节补辅码（原本会先合成大写字母）                                                                                                             |
-| `lua/commit_comment.lua`           | Ctrl+J 把候选的注释直接上屏（反查结果上屏）                                                                                                                          |
+| `lua/commit_comment.lua`           | Ctrl+I 把候选的注释直接上屏（反查结果上屏）                                                                                                                          |
 | `lua/charset_filter.lua`           | 大小字集开关（工具栏/开关里的「小」字集过滤）                                                                                                                            |
 | `lua/moqi/jianma_show.lua`         | 反查一二三简码、超级简拼和 `custom_short.txt`；改词表不用再手动动 `jian.dict.yaml`；单字缺辅码时读 `custom_fuzhu.txt`                                                                |
 | `lua/shift_enter.lua`              | 同文 **▲ + Enter** 输出 `<br>`，在 Obsidian 表格里换行                                                                                                        |
-| `lua/recent_commits.lua` | **最近上屏**：输入大写 **Z**，候选就是最近上屏过的内容（最近一次排第一，最多 6 条），数字键、空格都能选 |
+| `lua/recent_commits.lua`            | **最近上屏**：输入大写 **Z**，候选就是最近上屏过的内容（最近一次排第一，最多 36 条），数字键、空格都能选 |
+| `lua/commit_current.lua`            | **Ctrl+J 顺序上屏当前页的候选**：每条一行，挑词、整理字表时不用一条条点；条数改 `moqi.yaml` 的 `commit_current: limit` |
 | `super4.dict.yaml` + `生成super4.py` | 四简码反查。原版四简码与 e 简码有交叉，反查也混乱，这里不用 e 简码、统一给四简码做反查；四简码条目太多，塞进 `jianma_show.lua` 会拖慢，所以单独一张表。一般建议直接加进 `custom_short.txt` 即可，若要修改可以使用 `生成super4.py` 重新生成 |
 | 单引号三选                              | 单引号键上屏候选第三                                                                                                                                         |
 | 逗号上屏超级简拼                           | 逗号键上屏超级简拼                                                                                                                                          |
@@ -219,9 +220,18 @@ pause >nul
 
 **日期时间别名**（`Da` 日期、`Uj` 时间、`DT` 完整时间、`Wk` 星期、`Ts` 时间戳、`Dt` 不带秒）
 
-**`shift_enter.lua` 想关掉**：它是全局的，任何输入框里 ▲+Enter 都输出 `<br>`。不要的话把 `moqi.yaml` 的 `engine.processors` 里 `- lua_processor@*shift_enter` 那一行删掉（或注释），重新部署即可。
+**Ctrl+J 顺序上屏当前页的候选**：打 `hc` 按 Ctrl+J，一次得到「好、号、薅、耗、豪、壕」六行；按的是**当前这一页**，翻到第 2 页再按就是第 2 页那几条。条数在 `moqi.yaml` 的 `commit_current: limit` 里改（默认 6，即一页）。
 
-**大写 Z 的候选是怎么回事**：输入 Z 时把最近上屏过的内容列出来（最近一次第一，最多 6 条，历史跨会话保留），数字选或空格选第一个都行；接着打别的字母就回到正常输入，`Zcy` 自造词、`Zm` 反查这些都不受影响。
+**`shift_enter.lua` 想关掉**：它是在安卓全局的，任何输入框里 ▲+Enter 都输出 `<br>`。不要的话把 `moqi.yaml` 的 `engine.processors` 里 `- lua_processor@*shift_enter` 那一行删掉（或注释），重新部署即可。
+
+**大写 Z 的候选是怎么回事**：输入 Z 时把最近上屏过的内容列出来（最近一次第一，最多 36 条，历史跨会话保留；重启输入法、重新部署会清空）。接着打别的字母就回到正常输入，`Zcy` 自造词、`Zm` 反查这些都不受影响。
+
+每次上屏还会往日志里追加一行，被软件吞字时可以照它找回来：
+
+- Windows：`custom_phrase\recent_commits_windows.log`
+- 安卓：`/storage/emulated/0/Android/data/com.osfans.trime/files/rime/custom_phrase/recent_commits_android.log`（同文自己的数据目录，手机自带的「文件」应用打不开，MT 管理器这类能浏览的话可以看到）
+
+只写不读，所以重启后 Z 列表照旧是空的；单个文件超过 512 KB 会自动截掉前一半。日志不进 git；两个平台分开写是为了不让同步工具撞成冲突副本，仓库里的 `.stignore` 已经放行了这两份，有需要可以复用
 
 ## 四、同文专属（安卓）
 
@@ -237,6 +247,7 @@ pause >nul
 | E   | Ctrl+E 翻译     | `CtrlE`（`send: Control+e`）        |
 | R   | 重复上屏刚打出的内容    | `RepeatCommit`（`command: commit`） |
 | T   | 插入当前日期时间（不含秒） | `Timestamp`（`command: date`）      |
+| I   | 上屏反查（Ctrl+I）  | `CtrlI`（`send: Control+i`）        |
 | O   | 打开 Obsidian   | `AppObsidian`                     |
 | P   | Ctrl+P 首末拆分   | `CtrlP`（`send: Control+p`）        |
 
@@ -253,7 +264,7 @@ pause >nul
 | H   | 左滑    | 收起/展开符号小字                    | `HideSymbols`                    |
 | H   | 下滑    | 收起/展开注解小字                    | `HideHints`                      |
 | J   | 长按/上滑 | 成对括号（中文态 `（）`、英文态 `()`），光标居中 | ASCII 字面量 `(){Left}`             |
-| J   | 下滑    | 上屏反查（Ctrl+J）                 | `CtrlJ`                          |
+| J   | 下滑    | 上屏当前页的候选（Ctrl+J）             | `CtrlJ`（`send: Control+j`）       |
 | L   | 长按/上滑 | 分号 `;`，可上屏次选                 | —                                |
 | L   | 下滑    | 墨奇拆字（Ctrl+L）                 | `CtrlL`                          |
 
@@ -334,6 +345,7 @@ pause >nul
 - 选择：按住 Shift（`Shift_L2`）
 - ⇐ / ⇒：Ctrl+← / Ctrl+→ 跳词（`Left1` / `Right1`）
 - 删词：⌫ 是 Ctrl+Backspace（`CtrlBackspace`），删除键是 Ctrl+Delete（`DeleteCandidate`）
+- 撤销：⌫ 下滑是 Ctrl+Z（`CtrlZ`）
 - Alt：单击挂起 Alt（`Alt_L2`），下一个键带 Alt
 - 重做：Ctrl+Shift+Z（`redo`）
 - 空格：点按出空格，长按/上滑出 Tab（`space_tab`）

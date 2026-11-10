@@ -1,3 +1,6 @@
+// 上屏日志要同步（Windows / 安卓各一份），规则在 stignore-recent-commits.txt，
+// 用 include 引进来；位置必须在下面的 *.log 之前——Syncthing 是"首条匹配生效"。
+#include stignore-recent-commits.txt
 (?d).git/
 (?d).gitattributes
 (?d)*.sync-conflict-*
