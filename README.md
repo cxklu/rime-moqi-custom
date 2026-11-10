@@ -212,7 +212,7 @@ pause >nul
 | `lua/moqi/jianma_show.lua`         | 反查一二三简码、超级简拼和 `custom_short.txt`；改词表不用再手动动 `jian.dict.yaml`；单字缺辅码时读 `custom_fuzhu.txt`                                                                |
 | `lua/shift_enter.lua`              | 同文 **▲ + Enter** 输出 `<br>`，在 Obsidian 表格里换行                                                                                                        |
 | `lua/recent_commits.lua`            | **最近上屏**：输入大写 **Z**，候选就是最近上屏过的内容（最近一次排第一，最多 36 条），数字键、空格都能选 |
-| `lua/commit_current.lua`            | **Ctrl+J 顺序上屏当前页的候选**：每条一行，挑词、整理字表时不用一条条点；条数改 `moqi.yaml` 的 `commit_current: limit` |
+| `lua/commit_current.lua`            | **Ctrl+J 顺序上屏当前页的候选**：每条一行，挑词、整理字表时不用一条条点；条数改 `moqi_wan_flypymo.schema.yaml` 的 `commit_current: limit` |
 | `super4.dict.yaml` + `生成super4.py` | 四简码反查。原版四简码与 e 简码有交叉，反查也混乱，这里不用 e 简码、统一给四简码做反查；四简码条目太多，塞进 `jianma_show.lua` 会拖慢，所以单独一张表。一般建议直接加进 `custom_short.txt` 即可，若要修改可以使用 `生成super4.py` 重新生成 |
 | 单引号三选                              | 单引号键上屏候选第三                                                                                                                                         |
 | 逗号上屏超级简拼                           | 逗号键上屏超级简拼                                                                                                                                          |
@@ -220,7 +220,7 @@ pause >nul
 
 **日期时间别名**（`Da` 日期、`Uj` 时间、`DT` 完整时间、`Wk` 星期、`Ts` 时间戳、`Dt` 不带秒）
 
-**Ctrl+J 顺序上屏当前页的候选**：打 `hc` 按 Ctrl+J，一次得到「好、号、薅、耗、豪、壕」六行；按的是**当前这一页**，翻到第 2 页再按就是第 2 页那几条。条数在 `moqi.yaml` 的 `commit_current: limit` 里改（默认 6，即一页）。
+**Ctrl+J 顺序上屏当前页的候选**：打 `hc` 按 Ctrl+J，一次得到「好、号、薅、耗、豪、壕」六行；按的是**当前这一页**，翻到第 2 页再按就是第 2 页那几条。条数在 `moqi_wan_flypymo.schema.yaml` 的 `commit_current: limit` 里改（默认 6，即一页）。
 
 **`shift_enter.lua` 想关掉**：它是在安卓全局的，任何输入框里 ▲+Enter 都输出 `<br>`。不要的话把 `moqi.yaml` 的 `engine.processors` 里 `- lua_processor@*shift_enter` 那一行删掉（或注释），重新部署即可。
 
