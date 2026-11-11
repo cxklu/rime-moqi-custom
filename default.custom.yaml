@@ -3,6 +3,8 @@
 
 patch:
   schema_list:
-    - schema: moqi_wan_flypymo_small   # 墨奇·小鹤+墨奇形（小字集，日常用，候选快）
-    - schema: moqi_wan_flypymo         # 墨奇·小鹤+墨奇形（大字集，含 GB18030 扩展区生僻字）
+    - schema: moqi_wan_flypymo_small   # 墨奇·小鹤+墨奇形（小字集，默认用，候选快）
+    # 大字集方案：只有需要 GB18030 扩展区那一批生僻字时才启用。
+    # 注释掉是为了误触方案菜单时切不进去；要启用就取消下一行注释再部署。
+    # - schema: moqi_wan_flypymo
     - schema: moqi_single_xh           # 墨奇码·顶屏版·小鹤双拼

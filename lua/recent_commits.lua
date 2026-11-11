@@ -56,7 +56,7 @@ end
 -- 看不到、Syncthing 也同步不到）；Trime 也可能用 Android/data 下的目录。这里不靠
 -- "读得到 custom_short.txt" 判断（判断失败就会退到私有目录、日志就消失了），而是
 -- 对每个候选直接试着打开日志文件，谁能写就用谁。
-local function log_dirs(tag)
+local function log_dirs(tag, userdir)
   local out, seen = {}, {}
   local function add(p)
     if p and p ~= "" and not seen[p] then
@@ -69,6 +69,16 @@ local function log_dirs(tag)
     local ext = getenv("EXTERNAL_STORAGE")
     if ext and ext ~= "" then add(ext .. "/rime") end
     add("/sdcard/rime")
+    -- 同文的部署/同步会按 /storage/emulated/0/rime 把 App 私有 rime 目录重写一遍，
+    -- 写在里面的日志会被清掉；所以优先放到 rime 目录的上一层（files/），
+    -- 那里同文不会碰，日志才留得住。
+    if userdir then
+      local parent = userdir:match("^(.*)[/\\]rime[/\\]?$")
+      if parent then
+        add(parent)
+        add(parent .. "/recent_commits")
+      end
+    end
     add("/storage/emulated/0/Android/data/com.osfans.trime/files/rime")
   end
   local ok, d = pcall(function() return rime_api.get_user_data_dir() end)
@@ -124,13 +134,17 @@ local function ensure_log_path(env)
       name = base .. "_" .. tag .. ".log"
     end
 
+    local userdir
+    local okd, d = pcall(function() return rime_api.get_user_data_dir() end)
+    if okd and d and d ~= "" then userdir = d end
+
     -- 显式路径优先：想在手机上抽查时可以把它写死在 schema 里
     local explicit = cfg:get_string("recent_commits/log_path")
     local targets = {}
     if explicit and explicit ~= "" then
       targets[#targets + 1] = explicit
     else
-      for _, root in ipairs(log_dirs(tag)) do
+      for _, root in ipairs(log_dirs(tag, userdir)) do
         targets[#targets + 1] = root .. "/" .. dir_name .. "/" .. name
         targets[#targets + 1] = root .. "/" .. name
       end
@@ -180,31 +194,23 @@ end
 -- 触发 commit_notifier，光靠订阅会漏记）
 rawset(_G, "moqi_recent_record", remember)
 
--- 在会话 context 上订阅上屏事件（整个 Lua 状态只订一次）
--- 注意：不能用 context 做去重键——每次取 env.engine.context 拿到的是新的
--- userdata 包装，比较永远不相等，于是每次按键都再连一个回调，一次上屏就被
--- 记成十几条。这里用布尔标记，只连一次。
-local function ensure_hook(env)
-  if rawget(_G, "moqi_recent_hooked") then return end
-  local ctx = env and env.engine and env.engine.context
-  if not ctx then return end
-  local ok = pcall(function()
+function M.init(env)
+  pcall(function() ensure_log_path(env) end)
+  -- 每个输入会话（每个应用窗口）都会各自 init 一次，所以在这里连上屏通知就能
+  -- 覆盖所有窗口；重复连接由 remember() 里的 0.05 秒同文本去重兜住。
+  pcall(function()
+    local ctx = env and env.engine and env.engine.context
+    if not ctx then return end
     ctx.commit_notifier:connect(function(c)
       if rawget(_G, "moqi_recent_recording") then return end
       local ok2, text = pcall(function() return c:get_commit_text() end)
       if ok2 then remember(text) end
     end)
   end)
-  if ok then rawset(_G, "moqi_recent_hooked", true) end
-end
-
-function M.init(env)
-  pcall(function() ensure_log_path(env) end)
 end
 
 function M.func(input, env)
   ensure_log_path(env)
-  ensure_hook(env)
   if env.engine.context.input == "Z" then
     local seg = env.engine.context.composition:back()
     if seg and #history > 0 then
