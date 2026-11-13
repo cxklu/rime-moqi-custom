@@ -70,7 +70,120 @@ translator:
 aux_patch:
   __include: moqi_speller.yaml:/moqi_aux
   __append:
-    __include: moqi_speller.yaml:/common_aux
+    __include: aux_patch_plus
+
+#@flykeys-begin
+# ── 飞键（fly keys）：公开版默认关闭 ─────────
+# 规则与私人版同源，发布时由 _public\sync_public.ps1 自动整段注释，所以在公开仓库里
+# 打 qo/jo/rn/tl 这类码不会多出候选。想启用就把下面 aux_patch_plus 里 __append 段
+# 的 # 去掉，重新部署即可。
+aux_patch_plus:
+  __include: moqi_speller.yaml:/common_aux
+#  __append:
+#    # ① 纯双拼
+#    - derive|^q(q)$|qo|    # 秋天 qqtm → qotm
+#    - derive|^x(q)$|xo|    # 维修 wwxq → wwxo
+#    - derive|^j(q)$|jo|    # 就 jq → jo
+#    - derive|^q(x)$|qj|    # 恰恰 qxqx → qjqj
+#    - derive|^x(x)$|xj|    # 夏天 xxtm → xjtm
+#    - derive|^d(c)$|df|    # 说到 uodc → uodf
+#    - derive|^r(f)$|rn|    # 人 rf → rn
+#    - derive|^v(f)$|vn|    # 真 vf → vn
+#    - derive|^g(f)$|gn|    # 跟 gf → gn
+#    - derive|^f(f)$|fn|    # 分开 ffkd → fnkd
+#    - derive|^v(g)$|vm|    # 正好 vghc → vmhc
+#    - derive|^r(g)$|rm|    # 仍然 rgrj → rmrj
+#    - derive|^f(g)$|fm|    # 风景 fgjk → fmjk
+#    - derive|^g(g)$|gm|    # 更加 ggjx → gmjx
+#    - derive|^g(v)$|gi|    # 柜子 gvzi → gizi
+#    - derive|^t(z)$|tl|    # 头顶 tzdk → tldk
+#    - derive|^c(z)$|cl|    # 凑数 czuu → cluu
+#    - derive|^z(z)$|zl|    # 走步 zzbu → zlbu
+#    - derive|^d(z)$|dl|    # 都想 dzxl → dlxl
+#    - derive|^s(z)$|sl|    # 搜索 szso → slso
+#    # ② 带辅码的写法（第一个辅码字母、完整辅码、整句内的 o 结尾与 / 结尾）
+#    - derive|^q(q);(\w)(\w).*$|qo$2|
+#    - derive|^q(q);(\w)(\w).*$|qo$2$3|
+#    - derive|^q(q);(\w)(\w).*$|qo$2$3o|
+#    - derive|^q(q);(\w)(\w).*$|qo$2$3/|
+#    - derive|^x(q);(\w)(\w).*$|xo$2|
+#    - derive|^x(q);(\w)(\w).*$|xo$2$3|
+#    - derive|^x(q);(\w)(\w).*$|xo$2$3o|
+#    - derive|^x(q);(\w)(\w).*$|xo$2$3/|
+#    - derive|^j(q);(\w)(\w).*$|jo$2|
+#    - derive|^j(q);(\w)(\w).*$|jo$2$3|
+#    - derive|^j(q);(\w)(\w).*$|jo$2$3o|
+#    - derive|^j(q);(\w)(\w).*$|jo$2$3/|
+#    - derive|^q(x);(\w)(\w).*$|qj$2|
+#    - derive|^q(x);(\w)(\w).*$|qj$2$3|
+#    - derive|^q(x);(\w)(\w).*$|qj$2$3o|
+#    - derive|^q(x);(\w)(\w).*$|qj$2$3/|
+#    - derive|^x(x);(\w)(\w).*$|xj$2|
+#    - derive|^x(x);(\w)(\w).*$|xj$2$3|
+#    - derive|^x(x);(\w)(\w).*$|xj$2$3o|
+#    - derive|^x(x);(\w)(\w).*$|xj$2$3/|
+#    - derive|^d(c);(\w)(\w).*$|df$2|
+#    - derive|^d(c);(\w)(\w).*$|df$2$3|
+#    - derive|^d(c);(\w)(\w).*$|df$2$3o|
+#    - derive|^d(c);(\w)(\w).*$|df$2$3/|
+#    - derive|^r(f);(\w)(\w).*$|rn$2|
+#    - derive|^r(f);(\w)(\w).*$|rn$2$3|
+#    - derive|^r(f);(\w)(\w).*$|rn$2$3o|
+#    - derive|^r(f);(\w)(\w).*$|rn$2$3/|
+#    - derive|^v(f);(\w)(\w).*$|vn$2|
+#    - derive|^v(f);(\w)(\w).*$|vn$2$3|
+#    - derive|^v(f);(\w)(\w).*$|vn$2$3o|
+#    - derive|^v(f);(\w)(\w).*$|vn$2$3/|
+#    - derive|^g(f);(\w)(\w).*$|gn$2|
+#    - derive|^g(f);(\w)(\w).*$|gn$2$3|
+#    - derive|^g(f);(\w)(\w).*$|gn$2$3o|
+#    - derive|^g(f);(\w)(\w).*$|gn$2$3/|
+#    - derive|^f(f);(\w)(\w).*$|fn$2|
+#    - derive|^f(f);(\w)(\w).*$|fn$2$3|
+#    - derive|^f(f);(\w)(\w).*$|fn$2$3o|
+#    - derive|^f(f);(\w)(\w).*$|fn$2$3/|
+#    - derive|^v(g);(\w)(\w).*$|vm$2|
+#    - derive|^v(g);(\w)(\w).*$|vm$2$3|
+#    - derive|^v(g);(\w)(\w).*$|vm$2$3o|
+#    - derive|^v(g);(\w)(\w).*$|vm$2$3/|
+#    - derive|^r(g);(\w)(\w).*$|rm$2|
+#    - derive|^r(g);(\w)(\w).*$|rm$2$3|
+#    - derive|^r(g);(\w)(\w).*$|rm$2$3o|
+#    - derive|^r(g);(\w)(\w).*$|rm$2$3/|
+#    - derive|^f(g);(\w)(\w).*$|fm$2|
+#    - derive|^f(g);(\w)(\w).*$|fm$2$3|
+#    - derive|^f(g);(\w)(\w).*$|fm$2$3o|
+#    - derive|^f(g);(\w)(\w).*$|fm$2$3/|
+#    - derive|^g(g);(\w)(\w).*$|gm$2|
+#    - derive|^g(g);(\w)(\w).*$|gm$2$3|
+#    - derive|^g(g);(\w)(\w).*$|gm$2$3o|
+#    - derive|^g(g);(\w)(\w).*$|gm$2$3/|
+#    - derive|^g(v);(\w)(\w).*$|gi$2|
+#    - derive|^g(v);(\w)(\w).*$|gi$2$3|
+#    - derive|^g(v);(\w)(\w).*$|gi$2$3o|
+#    - derive|^g(v);(\w)(\w).*$|gi$2$3/|
+#    - derive|^t(z);(\w)(\w).*$|tl$2|
+#    - derive|^t(z);(\w)(\w).*$|tl$2$3|
+#    - derive|^t(z);(\w)(\w).*$|tl$2$3o|
+#    - derive|^t(z);(\w)(\w).*$|tl$2$3/|
+#    - derive|^c(z);(\w)(\w).*$|cl$2|
+#    - derive|^c(z);(\w)(\w).*$|cl$2$3|
+#    - derive|^c(z);(\w)(\w).*$|cl$2$3o|
+#    - derive|^c(z);(\w)(\w).*$|cl$2$3/|
+#    - derive|^z(z);(\w)(\w).*$|zl$2|
+#    - derive|^z(z);(\w)(\w).*$|zl$2$3|
+#    - derive|^z(z);(\w)(\w).*$|zl$2$3o|
+#    - derive|^z(z);(\w)(\w).*$|zl$2$3/|
+#    - derive|^d(z);(\w)(\w).*$|dl$2|
+#    - derive|^d(z);(\w)(\w).*$|dl$2$3|
+#    - derive|^d(z);(\w)(\w).*$|dl$2$3o|
+#    - derive|^d(z);(\w)(\w).*$|dl$2$3/|
+#    - derive|^s(z);(\w)(\w).*$|sl$2|
+#    - derive|^s(z);(\w)(\w).*$|sl$2$3|
+#    - derive|^s(z);(\w)(\w).*$|sl$2$3o|
+#    - derive|^s(z);(\w)(\w).*$|sl$2$3/|
+#@flykeys-end
+
 
 __patch:
   add_user_dict/dictionary: moqi_wan.extended

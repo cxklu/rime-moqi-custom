@@ -958,7 +958,7 @@ preset_keyboards:
       - { click: 6 }
       - { click: space_c, long_click: C_calc, swipe_up: C_calc, key_back_color: bc3, key_text_color: tc3, width: 13 }
 
-      - { click: "%", long_click: "''{Left}", swipe_up: "''{Left}", width: 13 }
+      - { click: "÷", long_click: "''{Left}", swipe_up: "''{Left}", width: 13 }
       - { click: "×", long_click: "^", swipe_up: "^", width: 13 }
       - { click: 7, long_click: select_all }
       - { click: 8, long_click: copy }
@@ -973,9 +973,8 @@ preset_keyboards:
         }
 
       - { click: Keyboard_default, width: 13, key_back_color: bc4, key_text_color: tc4 }
-      - { click: "÷", long_click: "……", swipe_up: "……", width: 13 }
-      - { click: liquid_keyboard_switch, long_click: Color_switch, key_back_color: bc1, key_text_color: tc1 }
-      - { click: 0, long_click: cut }
+      - { click: liquid_keyboard_switch, long_click: Color_switch, swipe_up: Color_switch, width: 13, key_back_color: bc1, key_text_color: tc1 }
+      - { click: 0, long_click: cut, width: 40 }
       - { click: ., long_click: N_date, swipe_up: N_date }
       - { click: Return, width: 13, key_back_color: bc4, key_text_color: tc4 }
 
